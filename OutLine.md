@@ -30,10 +30,10 @@ Proposals
 Benchmarks
 1. Test on how many (and which) homologs are detected
 2. Test on the following predictors
-..+ Psipred
-..+ SCAMPI
-..+ NeturfP
-..+ Psicov
-..+ plmDVA
-..+ PconsC3b
-..+ ????
+..* Psipred
+..* SCAMPI
+..* NeturfP
+..* Psicov
+..* plmDVA
+..* PconsC3b
+..* ????
