@@ -23,8 +23,9 @@ inFile can contain one or many sequences in fasta format.
     path: /proj/bioinfo/users/x_nansh/data/uniprot/2014-11-05/pfammap_from_pfamscan/pfamseqdb_nr90/
     size: about 25 GB
 
-    Method description: 
-        1. Search uniref100 (downloaded on 2014-11-05) sequences in Pfam-27.0
+    Method description:
+
+        1). Search uniref100 (downloaded on 2014-11-05) sequences in Pfam-27.0
            (both Pfam-A and Pfam-B) by pfam_scan.pl
            Script to call pfam_scan.pl is "src/run_pfam_scan.sh" with the
            following arguments
@@ -34,20 +35,20 @@ inFile can contain one or many sequences in fasta format.
            "src/submit_run_pfam_scan_uppmax.sh"
 
 
-        2. Get UniprotID to PfamID mapping table for any hit with e-value <=
+        2). Get UniprotID to PfamID mapping table for any hit with e-value <=
            1e-3. Repeated domain hits are counted only once.
            script: "src/build_seqid2pfamid_from_hmmscan.py"
 
-        3. Get PfamID to UniprotID mapping table from the UniprotID to PfamID
+        3). Get PfamID to UniprotID mapping table from the UniprotID to PfamID
            mapping table.
            script "src/build_pfamid2seqid_fromseqid2pfamid.py"
 
-        4. Generate FASTA seuqnece files for each family 
+        4). Generate FASTA seuqnece files for each family 
            script "src/buildFamSeqDB_from_famid2seqidmap.py"
 
-        5. Run CD-HIT to reduence the sequence redundancy to <90%.
+        5). Run CD-HIT to reduence the sequence redundancy to <90%.
 
-        6. Create the database by "src/my_formatdb.py"
+        6). Create the database by "src/my_formatdb.py"
 
     Usage of the database: by the class MyDB defined in the script
     "src/myfunc.py"
@@ -85,11 +86,12 @@ inFile can contain one or many sequences in fasta format.
     path: /proj/bioinfo/users/x_nansh/data/uniprot/2014-11-05/hmmscan_cdd/cddfamseqdb_nr90/ 
     size: about 300 GB
 
-    Method description: 
-        1. Create hmm database for CDD by the script
+    Method description:
+
+        1). Create hmm database for CDD by the script
            "src/make_hmmdb_for_cdd.sh" in the repository.
 
-        2. Search uniref100 (downloaded on 2014-11-05) sequences in database
+        2). Search uniref100 (downloaded on 2014-11-05) sequences in database
            created in the first step, called cddhmm by hmmscan
            Argument for hmmscan is as follows:
            $ hmmscan -E 0.1 --domtblout $tmpoutfile --acc --noali --notextw \
@@ -99,16 +101,16 @@ inFile can contain one or many sequences in fasta format.
            "src/divide_node_job_hmmscan.sh"
            "src/submit_hmmscan_cdd_uppmax.sh"
 
-        2. Get UniprotID to CDDfam mapping table for any hit with e-value <=
+        3). Get UniprotID to CDDfam mapping table for any hit with e-value <=
            1e-3. Repeated domain hits are counted only once.
            script: "src/build_seqid2pfamid_from_hmmscan.py"
 
-        3. Get PfamID to UniprotID mapping table from the UniprotID to PfamID
+        4). Get PfamID to UniprotID mapping table from the UniprotID to PfamID
            mapping table.
            script "src/build_pfamid2seqid_fromseqid2pfamid.py"
 
-        4. Generate FASTA seuqnece files for each family 
+        5). Generate FASTA seuqnece files for each family 
 
-        5. Run CD-HIT to reduence the sequence redundancy to <90%.
+        6). Run CD-HIT to reduence the sequence redundancy to <90%.
 
-        6. Create the database by "src/my_formatdb.py"
+        7). Create the database by "src/my_formatdb.py"
