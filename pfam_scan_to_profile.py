@@ -45,7 +45,7 @@ def main(argvs):
                 if pos != -1:
                     pfamList.append(line[pos:pos+7])
 
-    createHitDB(pfamList, name, work_dir)
+    createHitDB(list(set(pfamList)), name, work_dir)
 
 if __name__ == "__main__":
     main(sys.argv)
