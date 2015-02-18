@@ -20,13 +20,18 @@ def main(args):
 
     with open(inFile, "rU") as seqFile:
 
+        print "\nBegin..."
+
         if os.path.exists(outDir+"/entry_collection/") is False:
          os.mkdir(outDir+"/entry_collection/")
 
         if os.path.exists(outDir+"/statistics/") is False:
          os.mkdir(outDir+"/statistics/")
 
-        for entry in list(SeqIO.parse(seqFile, "fasta")):
+        z,Y=1,list(SeqIO.parse(seqFile, "fasta"))
+        for entry in Y:
+            print z,"/",len(Y)," ",entry.id
+            z+=1
             tmpDir = outDir + "/entry_collection/"+ entry.id + "/"
 
             if os.path.exists(tmpDir) is False:
@@ -52,7 +57,7 @@ def main(args):
     print "building legend.txt..."
     os.system("python legend.py "+outDir)
 
-    print "Job finished!"
+    print "Job finished!\n"
         
 if __name__=="__main__":
     main(sys.argv)

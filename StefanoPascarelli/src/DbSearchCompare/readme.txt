@@ -1,5 +1,12 @@
 *** When importing in other machine, modify first parameters of "Trigger" and "Pfamscan/pfamscan.pl" *** 
 (and maybe more)
+
+
+####################################################################################################
+### Quick Pipeline for comparison of fast DB search versus a standard slow jackhmmer on whole DB ###
+####################################################################################################
+
+
 ### Legend: ###
 
 domtest.py - comparison of domains
@@ -33,8 +40,12 @@ Parameters of HMMER: jackbigs.py
 
 to do:
 -improve comparison of sequences between the two modes
--inserting time comparison, with graphs and magic
+-improve time statistics?!?
+
+ver 0.91
+-fixed minor bugs...
+-jk
+-implemented quick time comparison and widened superposition of hits statistics
 
 
-ver 0.9
 SP+coll.

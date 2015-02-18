@@ -51,6 +51,117 @@ def percentgraphs(path,threshold):
 
  return X
 
+def parsetime(path):
+ """time bash command output parser, output is a list with 2 elements: seconds of CPU time(sys+usr) and seconds of effective time"""
+ l=[]
+ with open(path) as infile:
+  line=infile.readline()
+  regstr=r"(\d+).\d+user (\d+).\d+system (\d+):(\d+):?(\d+)?.?\d+elapsed"
+  match=re.search(regstr,line)
+  m=match.groups()
+
+  #user and system time
+  l.append(max(1,int(m[0])+int(m[1])))
+
+  #effective time
+  if m[-1]==None:
+   m=[0,0,0,m[2],m[3]]
+  l.append(max(1,int(m[2])*3600+int(m[3])*60+int(m[4])))
+
+ return l
+
+
+def timegraphs(fold):
+ """graphs running time comparison and returns a list with fast_list, slow_list and list(name) summed. list = [CPU time,effective time]"""
+
+#input from time output files
+ pscan=parsetime(fold+"/Pscantime.txt")
+ fast=parsetime(fold+"/fasttime.txt")
+ slow=parsetime(fold+"/slowtime.txt")
+####
+####Insert here if single entry time graph is needed
+####
+ fast_list=[pscan[0]+fast[0],pscan[1]+fast[1]]
+ slow_list=list(slow)
+ return fast_list+slow_list+[fold[-6:]]
+
+
+
+
+def megaplotime(big,avg,path):
+
+#computing average to insert in every plot
+ def unpacker(x,j):
+  l=[]
+  for item in x:
+   l.append(item[j])
+  return l
+
+ fc=np.mean(unpacker(avg,0))
+ fe=np.mean(unpacker(avg,1))
+ sc=np.mean(unpacker(avg,2))
+ se=np.mean(unpacker(avg,3))
+
+ average=[fc,fe,sc,se]+["Tot Avg"]
+			 #entry[0] is a list with lists of this shape (fc =fast CPU time, fe=fast effective time, etc with slow)
+                         #entry[1] is the group number of sequences
+
+ for entry in big:
+
+  entry[0].append(average)
+#  print entry
+  N = len(entry[0])
+
+###first graph (CPU time)
+  menMeans = tuple(unpacker(entry[0],2))
+
+  ind = np.arange(N)  # the x locations for the groups
+  width = min(0.90 / N, 0.40)       # the width of the bars
+
+  fig, ax = plt.subplots()
+  rects1 = ax.bar(ind, menMeans, width, color='red',log=True)
+
+  womenMeans = tuple(unpacker(entry[0],0))
+  rects2 = ax.bar(ind+width, womenMeans, width, color='yellow')
+
+  # add some text for labels, title and axes ticks
+  ax.set_ylabel('Time log scale (s)')
+  ax.set_title('CPU running time')
+  ax.set_xticks(ind+width)
+  usedbelow=ax.set_xticklabels( tuple(unpacker(entry[0],4)) )
+  plt.setp(usedbelow, rotation=45,fontsize=8)
+
+  ax.legend( (rects1[0], rects2[0]), ('Slow', 'Fast') )
+
+
+  pylab.savefig(path+"/statistics/CPUgraph_Group"+str(entry[1])+".png")
+  pylab.clf()
+
+#####second graph (real time)
+  menMeans = tuple(unpacker(entry[0],3))
+
+  ind = np.arange(N)  # the x locations for the groups
+  width = min(0.90 / N, 0.40)       # the width of the bars
+
+  fig, ax = plt.subplots()
+  rects1 = ax.bar(ind, menMeans, width, color='r',log=True)
+
+  womenMeans = tuple(unpacker(entry[0],1))
+  rects2 = ax.bar(ind+width, womenMeans, width, color='y')
+
+  # add some text for labels, title and axes ticks
+  ax.set_ylabel('Time log scale (s)')
+  ax.set_title('effective running time')
+  ax.set_xticks(ind+width)
+  usedbelow=ax.set_xticklabels( tuple(unpacker(entry[0],4)) )
+  plt.setp(usedbelow, rotation=45,fontsize=8)
+
+  ax.legend( (rects1[0], rects2[0]), ('Slow', 'Fast') )
+
+
+  pylab.savefig(path+"/statistics/efctimeGraph_Group"+str(entry[1])+".png")
+  pylab.clf()
+
 
 
 def main(argv):
@@ -63,6 +174,9 @@ def main(argv):
 #plot of total % results init
  totpercent=[[]for i in range(5)]
 
+#plot of running time results init
+ runtime=[]
+
 #plot of each entry 
  Y=next(os.walk(locE))[1]
  z=1
@@ -71,6 +185,7 @@ def main(argv):
    os.mkdir(locE+dirs+"/Graphs/")
   print dirs,z,"/",len(Y)
   z+=1
+# number of hits graph
   print "0< graph"
   total[0]+=scoregraphs(locE+dirs,0)
   print "50< graph"
@@ -80,17 +195,22 @@ def main(argv):
   print "400< graph"
   total[3]+=scoregraphs(locE+dirs,400)
   print "% graphs"
+# percent overlap graph
   for fufi in range(5):
    totpercent[fufi].append(percentgraphs(locE+dirs,fufi*50))
+# time comparison graph
+  runtime.append(timegraphs(locE+dirs))  
+
 
 
  #plot all data cont
  print "total graph"
  total.append([0,50,200,400])
  for i in range(4):
-  n,bins,patches=plt.hist(total[i],max(1,math.pow(len(total[i]),1.0/5)),normed=0,facecolor="red",alpha=0.5)
-  pylab.savefig(loc+"/statistics/"+str(total[4][i])+".png")
-  pylab.clf()
+  if total[i]!=[]:
+   n,bins,patches=plt.hist(total[i],max(1,math.pow(len(total[i]),1.0/5)),normed=0,facecolor="red",alpha=0.5)
+   pylab.savefig(loc+"/statistics/"+str(total[4][i])+".png")
+   pylab.clf()
 
  #plot percent data cont
  fast=[[],[]]
@@ -132,6 +252,21 @@ def main(argv):
  pylab.savefig(loc+"/statistics/Overall%.png")
  pylab.clf()
 
+
+#Plot time data
+ tmp,c=[],1
+ MONSTER=[]
+ avg=[]
+ for lis in runtime:
+  avg.append(lis)
+  tmp.append(lis)
+  if c%24==0:
+   MONSTER.append((tmp,c/14))
+   tmp=[]
+  c+=1
+ if tmp!=[]:
+  MONSTER.append((tmp,c//14+1))
+ megaplotime(MONSTER,avg,loc)
 
 
 

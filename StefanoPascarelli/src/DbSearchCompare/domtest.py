@@ -200,6 +200,7 @@ def main(argv):
 
  print "beginning of statistics"
  stats = computestats(loc+"/statistics/overlap.txt",matrixsave)
+ print "end of statistics"
 
 if __name__ == "__main__":
  main(sys.argv)
