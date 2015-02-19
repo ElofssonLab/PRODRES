@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import sys
+import sys,os
+
 
 
 ##########COPIPASTAED CODE######
@@ -30,7 +31,9 @@ def parsenames(p,seqname):
 
 def main(argv):
 
-  tmpdir= argv[1]
+ print " - start results comparison"
+ tmpdir= argv[1]
+ if os.path.exists(tmpdir+"Comparison.txt") is False:
   seqname=tmpdir[-7:-1]
 
   outfile=tmpdir+"Comparison.txt"
@@ -49,11 +52,18 @@ def main(argv):
  #LENGTHS
   out.write("##################\nDictionary length: "+ str(len(sdnames.keys()))+" "+str(len(fdnames.keys()))+"\n##################\n")
 
+#listget
+  def lget(l,idx,deffo):
+   try:
+    return l[idx]
+   except IndexError:
+    return deffo
+
  #TOP 15 names
   out.write("\nNames dictionary Top 15 scoring hits:\n")
   s,f=sorted(sdnames.values(),reverse=True),sorted(fdnames.values(),reverse=True)
   for i in range(15):
-   out.write("{:>20} {:>10} {:>20} {:>10}".format(s[i][1],str(s[i][0]),f[i][1],str(f[i][0]))+"\n")
+   out.write("{:>20} {:>10} {:>20} {:>10}".format(lget(s,i,[0,"-"])[1],str(lget(s,i,"-")[0]),lget(f,i,[0,"-"])[1],str(lget(f,i,"-")[0]))+"\n")
 
 #### 2nd copypasta ####
 
@@ -158,9 +168,10 @@ def main(argv):
     count=count+1
   out.write("\nSlow seq score>200: "+str(count))
 
+  print " - end results comparison"
 
-
-
+ else:
+  print " - skipped, Comparison.txt already present"
 
 if __name__=="__main__":
  main(sys.argv)

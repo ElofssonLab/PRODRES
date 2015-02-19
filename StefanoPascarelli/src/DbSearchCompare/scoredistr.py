@@ -116,7 +116,7 @@ def megaplotime(big,avg,path):
   menMeans = tuple(unpacker(entry[0],2))
 
   ind = np.arange(N)  # the x locations for the groups
-  width = min(0.90 / N, 0.40)       # the width of the bars
+  width = min(1.5 / (N/3), 0.35)       # the width of the bars
 
   fig, ax = plt.subplots()
   rects1 = ax.bar(ind, menMeans, width, color='red',log=True)
@@ -141,7 +141,7 @@ def megaplotime(big,avg,path):
   menMeans = tuple(unpacker(entry[0],3))
 
   ind = np.arange(N)  # the x locations for the groups
-  width = min(0.90 / N, 0.40)       # the width of the bars
+  width = min(1.5 / (N/3), 0.35)       # the width of the bars
 
   fig, ax = plt.subplots()
   rects1 = ax.bar(ind, menMeans, width, color='r',log=True)
@@ -183,7 +183,7 @@ def main(argv):
  for dirs in Y:
   if os.path.exists(locE+dirs+"/Graphs/") is False:
    os.mkdir(locE+dirs+"/Graphs/")
-  print dirs,z,"/",len(Y)
+  print "\n",dirs,z,"/",len(Y)
   z+=1
 # number of hits graph
   print "0< graph"
@@ -260,7 +260,7 @@ def main(argv):
  for lis in runtime:
   avg.append(lis)
   tmp.append(lis)
-  if c%24==0:
+  if c%14==0:
    MONSTER.append((tmp,c/14))
    tmp=[]
   c+=1

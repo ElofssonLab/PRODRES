@@ -8,10 +8,11 @@ import myfunc
 pfam_Dir = sys.argv[3]
 pfamseqdb = pfam_Dir+"pfamfull/uniref100.pfam27.pfamseq.nr90"
 pfamScan = "/home/stefano/git/FastPSSM/StefanoPascarelli/src/DbSearchCompare/Pfamscan/pfam_scan.pl"
-#Eval_tr =""
-#Clan_overlap=""
-Clan_overlap=" -clan_overlap "
-Eval_tr=" -e_seq 1 "
+Eval_tr=" -e_seq "+sys.argv[4]
+Clan_overlap=""
+if sys.argv[5]==True:
+ Clan_overlap=" -clan_overlap "
+
 
 def createHitDB(pfamList, prot_name, work_dir):
     hdl = myfunc.MyDB(pfamseqdb)

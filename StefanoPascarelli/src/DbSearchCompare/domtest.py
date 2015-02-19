@@ -169,7 +169,7 @@ def main(argv):
  z=1
  Y=next(os.walk(locE))[1]
  for dirs in Y:
-  print dirs,z,"/",len(Y)
+  print "\n",dirs,z,"/",len(Y)
   z+=1
  #results from whole db jackhammer
   dic=parsefile(locE+dirs+"/slowHMM/tableOut.txt")

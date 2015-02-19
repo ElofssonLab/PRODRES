@@ -9,7 +9,8 @@ fi
 tmpdir=$1;
 infile_path=${tmpdir}query;
 dbpath=$2;
-
+pscan_e_val=$3;
+clan_overlap=$4;
 #if [[ -s ${infile_path}.prf ]]; then
 #    echo "$0: Found file '${infile_path}.mtx', skipping BLAST-run";
 #    exit ;
@@ -21,8 +22,7 @@ dbpath=$2;
 ## PFAMSCAN DATABASE CREATION ##
 
 #echo "python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/"
-
-python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir $dbpath/
+python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir $dbpath $pscan_e_val $clan_overlap/
 #exit;
 
 

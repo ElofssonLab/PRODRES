@@ -6,6 +6,14 @@
 ### Quick Pipeline for comparison of fast DB search versus a standard slow jackhmmer on whole DB ###
 ####################################################################################################
 
+### Parameters file ###
+
+up to now, it HAS to be formatted this way:
+
+          pscan Evalue=0.01 clan_overlap=True
+
+only in the first line
+
 
 ### Legend: ###
 
@@ -41,6 +49,10 @@ Parameters of HMMER: jackbigs.py
 to do:
 -improve comparison of sequences between the two modes
 -improve time statistics?!?
+
+ver 0.92
+-minor bugs
+-added input parameter file handling
 
 ver 0.91
 -fixed minor bugs...

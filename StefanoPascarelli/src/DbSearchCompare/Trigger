@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import sys
+import sys,re
 import os
 import time
 from Bio import SeqIO
@@ -10,7 +10,7 @@ dbpath="~/PDATA/workspace/fastpfam_pipeline_v0.9/pfam/"
 
 def main(args):
     if len(args)< 3:
-     print "Usage: Trigger inputfile.fasta outfolder/"
+     print "Usage: Trigger inputfile.fasta outfolder/ [parameters file]"
      sys.exit()
     inFile = args[1]
     outDir = args[2] 
@@ -28,9 +28,24 @@ def main(args):
         if os.path.exists(outDir+"/statistics/") is False:
          os.mkdir(outDir+"/statistics/")
 
+
+#handling input variables:
+        pscan_e_val=1
+        clan_overlap=True
+        if len(args)==4:
+         try:
+          with open(args[3]) as param_file:
+           rawr=r"pscan Evalue=(.+) clan_overlap=(True|False)"
+           m=re.search(rawr,param_file.readline())
+           pscan_e_val=m.groups()[0]
+           clan_overlap=m.groups()[1]
+         except IOError:
+          print "Error reading param file"
+
+
         z,Y=1,list(SeqIO.parse(seqFile, "fasta"))
         for entry in Y:
-            print z,"/",len(Y)," ",entry.id
+            print "\n",z,"/",len(Y)," ",entry.id
             z+=1
             tmpDir = outDir + "/entry_collection/"+ entry.id + "/"
 
@@ -40,7 +55,7 @@ def main(args):
             with open(tmpDir + "query.fa", "w") as outFile:
                 outFile.write(">" + str(entry.id) + "\n" + str(entry.seq))
 
-            os.system("./fa2prfs_pfamscan.sh " + tmpDir+" "+dbpath);
+            os.system("./fa2prfs_pfamscan.sh " + tmpDir+" "+dbpath+" "+pscan_e_val+" "+clan_overlap);
 
 
 #domain comparison
