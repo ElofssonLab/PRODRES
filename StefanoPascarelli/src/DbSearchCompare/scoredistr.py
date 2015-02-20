@@ -72,7 +72,7 @@ def parsetime(path):
 
 
 def timegraphs(fold):
- """graphs running time comparison and returns a list with fast_list, slow_list and list(name) summed. list = [CPU time,effective time]"""
+ """graphs running time comparison and returns a list with fast_list + slow_list + list(name) summed. list = [CPU time,effective time]"""
 
 #input from time output files
  pscan=parsetime(fold+"/Pscantime.txt")

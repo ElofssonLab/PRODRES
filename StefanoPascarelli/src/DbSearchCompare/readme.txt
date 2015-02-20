@@ -17,11 +17,6 @@ only in the first line
 
 ### Legend: ###
 
-domtest.py - comparison of domains
-scoredistr.py - graph of domtest results, either in score distribution and pie charts of overlapping
-parsejackcompare.py - quick comparison between fast and slow results
-jackbigs.py - pipeline for slow and big or small fast jackhmmer
-
 Trigger - usage: Trigger infile.fasta outdir
  dependencies:
     fa2prfs_pfamscan.sh: bash evocation of pipeline each query
@@ -31,6 +26,11 @@ Trigger - usage: Trigger infile.fasta outdir
                    mybase: dependencies
          my_uniqueseq.py: from temporary database, removes repeated sequences
     legend.py: creates legend.txt in main directory
+
+jackbigs.py - pipeline for slow and big or small fast jackhmmer
+domtest.py - comparison of domains
+scoredistr.py - graph of domtest results, either in score distribution and pie charts of overlapping
+parsejackcompare.py - quick comparison between fast and slow results
 
 
     

@@ -85,6 +85,7 @@ def compare(d,fast,p):
    o.write("%.2f%s"%stats[0])
    for st in stats[1:]:
     o.write("%.2f%s"%st)
+#flag for bad
     if st[0]<25:
      bad.append(t)
    o.write("\n\n")
