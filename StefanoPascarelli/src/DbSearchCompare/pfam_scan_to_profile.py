@@ -31,14 +31,13 @@ def createHitDB(pfamList, prot_name, work_dir):
 
 def main(argvs):
 
+   input_file = argvs[1]
+   work_dir = argvs[2]
+   name_temp = (input_file[input_file.rfind("/")+1:])
+   name = name_temp[:name_temp.rfind(".")]
    print " - start pfamscan"
    if os.path.exists(work_dir + name + ".txt") is False:
      
-    input_file = argvs[1]
-    work_dir = argvs[2]
-
-    name_temp = (input_file[input_file.rfind("/")+1:])
-    name = name_temp[:name_temp.rfind(".")]
     sCmd = "time -o "+work_dir+"/Pscantime.txt perl " + pfamScan + Clan_overlap + Eval_tr +" -fasta "+input_file + " -dir " + pfam_Dir + " -outfile " + work_dir + name + ".txt"
     os.system(sCmd)
 
