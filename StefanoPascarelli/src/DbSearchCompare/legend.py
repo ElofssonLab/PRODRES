@@ -11,9 +11,12 @@ def main(argv):
 
 
  with open(argv[1]+"Legend.txt","w") as legend:
+  out=tuple(argv[2:])
+
+  legtext="""run performed on %s sequences, pscan eval= %s, clan overlap = %s
 
 
-  legtext="""                    #####################################################
+                    #####################################################
                           Slow-Fast DB scan comparison Output Legend
 
                                          ver 0.9
@@ -33,7 +36,7 @@ entry_collection/					Collection of folders, one each entry
 
 	Graphs/						Collection of graphs
 		{0/50/../400}.png	Graphics for number of sequences with score > x
-		fast{0/50/../200}.png	Graphic representation of fast method (domain) coverage % 
+		fast{0/50/../200}.png	Graphic representation of fast method (domain) coverage %% 
 						in respect to slow method hits with bitscore > x
 
 	{fast/slow}time.txt		Output of "time" unix command for later time elaboration
@@ -60,12 +63,12 @@ entry_collection/					Collection of folders, one each entry
 statistics/						Collection of dataset statistics
 
 	{0/50/../400}.png		Overall distribution of results score
-	Overall%.png			Average percentage overlap within dataset with standard deviation
+	Overall%%.png			Average percentage overlap within dataset with standard deviation
 	hell.txt			A collection of very low scoring entries mainly for "debug" reasons (contrappasso)
 	CPUtime...png			Graphical comparison of CPU running time for all sequences in groups of 24
 	efctime...png			Graphical comparison of effective running time for all sequences in groups of 24
 
-"""
+"""%out
   legend.write(legtext)
 
 

@@ -70,7 +70,7 @@ def main(args):
 
 #legend
     print "building legend.txt..."
-    os.system("python legend.py "+outDir)
+    os.system("python legend.py "+outDir+" "+str(len(Y))+" "+pscan_e_val+" "+clan_overlap)
 
     print "Job finished!\n"
         

@@ -97,14 +97,32 @@ def megaplotime(big,avg,path):
    l.append(item[j])
   return l
 
- fc=np.mean(unpacker(avg,0))
- fe=np.mean(unpacker(avg,1))
- sc=np.mean(unpacker(avg,2))
- se=np.mean(unpacker(avg,3))
+#get all time values
+ FC=unpacker(avg,0)
+ FE=unpacker(avg,1)
+ SC=unpacker(avg,2)
+ SE=unpacker(avg,3)
+#calculate mean
+ fc=np.mean(FC)
+ fe=np.mean(FE)
+ sc=np.mean(SC)
+ se=np.mean(SE)
 
  average=[fc,fe,sc,se]+["Tot Avg"]
 			 #entry[0] is a list with lists of this shape (fc =fast CPU time, fe=fast effective time, etc with slow)
                          #entry[1] is the group number of sequences
+
+#output file with meantime averages
+ with open(path+"/statistics/AvgTimeStat.txt","w") as timefile:
+  timefile.write("#####\nAverage time output\n#####\n\n")
+  std=("std:",np.std(FC),np.std(FE),np.std(SC),np.std(SE))
+  names=" - ","Fast Cpu","Fast effective","Slow Cpu","Slow effective"
+
+  ef = lambda x: "{0[0]:^5} {0[1]:^15} {0[2]:^15} {0[3]:^25} {0[4]:^15}".format(x)+"\n"
+  timefile.write(ef(names))
+  timefile.write(ef(["mean:"]+average[:-1]))
+  timefile.write(ef(std))
+##
 
  for entry in big:
 
