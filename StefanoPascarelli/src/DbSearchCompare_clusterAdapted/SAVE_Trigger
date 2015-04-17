@@ -1,0 +1,88 @@
+#!/usr/bin/python
+
+import sys
+import re
+import os
+import time
+from Bio import SeqIO
+
+#~/PDATA/workspace/fastpfam_pipeline_v0.9/pfam/
+dbpath="~/glob/pfam/"
+
+
+def main(args):
+    if len(args)< 3:
+     print "Usage: Trigger jobid flag inputfile.fasta outfolder/ [parameters file]"
+     sys.exit()
+    flag=args[2]
+    inFile = args[3]
+    outDir = args[4] 
+    jobid = args[1]
+#    if os.path.exists(outDir) is False:
+#        os.mkdir(outDir)
+
+
+    with open(inFile, "rU") as seqFile:
+
+       # print "\nBegin..."
+
+#        if os.path.exists(outDir+"/entry_collection/") is False:
+#         os.mkdir(outDir+"/entry_collection/")
+
+       # if os.path.exists(outDir+"/statistics/") is False:
+        # os.mkdir(outDir+"/statistics/")
+
+
+#handling input variables:
+        pscan_e_val=1
+        clan_overlap=True
+        if len(args)==6:
+         try:
+          with open(args[5]) as param_file:
+           rawr=r"pscan Evalue=(.+) clan_overlap=(True|False)"
+           m=re.search(rawr,param_file.readline())
+           pscan_e_val=m.groups()[0]
+           clan_overlap=m.groups()[1]
+         except IOError:
+#          print "error in reading param file"
+          sys.exit()
+          #print "Error reading param file"
+
+
+        Y=list(SeqIO.parse(seqFile, "fasta"))
+        for entry in Y:
+
+            #print "\n",z,"/",len(Y)," ",entry.id
+            tmpDir = outDir + "/entry_collection/"+str(entry.id) + "/"
+
+
+            open(tmpDir+"jobid.txt","w").write(jobid)
+#            if os.path.exists(tmpDir) is False:
+#                os.mkdir(tmpDir)
+
+#            if os.path.exists(tmpDir + "query.fa") is False:
+            with open(tmpDir + "query.fa", "w") as outFile:
+                outFile.write(">" + str(entry.id) + "\n" + str(entry.seq))
+#            print "fa2"
+            os.system("./SAVE_fa2prfs_pfamscan.sh " + tmpDir+" "+dbpath+" "+str(pscan_e_val)+" "+str(clan_overlap)+" "+str(flag));
+
+
+#domain comparison *REMOVED IN CLUSTER RUN*
+#    print "Starting domain comparison..."
+#    os.system("python domtest.py "+outDir)
+#    print "Ending domain comparison"
+
+#graph building *REMOVED IN CLUSTER RUN*
+#    print "Starting graph construction..."
+#    os.system("python scoredistr.py "+outDir)
+#    print "Ending graph construction"
+
+#legend *REMOVED IN CLUSTER RUN*
+#    print "building legend.txt..."
+#    os.system("python legend.py "+outDir+" "+str(len(Y))+" "+pscan_e_val+" "+clan_overlap)
+
+#    print "Job finished!\n"
+        
+if __name__=="__main__":
+    main(sys.argv)
+

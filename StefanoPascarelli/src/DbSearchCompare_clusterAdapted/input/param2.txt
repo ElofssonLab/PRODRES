@@ -1,0 +1,1 @@
+pscan Evalue=10 clan_overlap=False
