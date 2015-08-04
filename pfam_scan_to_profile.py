@@ -4,9 +4,9 @@ import linecache
 from random import randrange
 import myfunc
 
-pfam_Dir = "/scratch/chrisp/databases/pfam/"
-pfamseqdb = "/scratch/chrisp/databases/pfamfull/uniref100.pfam27.pfamseq.nr90"
-pfamScan = "/scratch/chrisp/databases/pfam_seq/PfamScan/pfam_scan.pl"
+pfam_Dir = "/Users/arnee/Projects/FastPSSM/data/Pfam/"
+pfamseqdb = "/Users/arnee/Projects/FastPSSM/data/pfamfull/uniref100.pfam27.pfamseq.nr90"
+pfamScan = "/Users/arnee/Projects/FastPSSM/bin/PfamScan/pfam_scan.pl"
 
 def createHitDB(pfamList, prot_name, work_dir):
     hdl = myfunc.MyDB(pfamseqdb)

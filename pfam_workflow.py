@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 import time
 from Bio import SeqIO
 
@@ -15,8 +16,11 @@ def main(args):
 
     with open(inFile, "rU") as seqFile:
         for entry in list(SeqIO.parse(seqFile, "fasta")):
-            tmpDir = outDir + entry.id + "/"
+            filename = "DIR:"+re.sub(r'\|','-',entry.id)
 
+            tmpDir = outDir + filename + "/"
+            print tmpDir
+            
             if os.path.exists(tmpDir) is False:
                 os.mkdir(tmpDir)
 
