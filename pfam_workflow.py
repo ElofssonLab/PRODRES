@@ -16,7 +16,7 @@ def main(args):
 
     with open(inFile, "rU") as seqFile:
         for entry in list(SeqIO.parse(seqFile, "fasta")):
-            filename = "DIR:"+re.sub(r'\|','-',entry.id)
+            filename = "DIR-"+re.sub(r'\|','-',entry.id)
 
             tmpDir = outDir + filename + "/"
             print tmpDir
@@ -27,7 +27,7 @@ def main(args):
             with open(tmpDir + "query.fa", "w") as outFile:
                 outFile.write(">" + str(entry.id) + "\n" + str(entry.seq))
 
-            os.system("./fa2prfs_pfamscan.sh " + tmpDir + " " + blastDir);
+            os.system("./fa2prfs_pfamscan_arne.bash " + tmpDir + " " + blastDir);
 
 
             #Run predictors here
