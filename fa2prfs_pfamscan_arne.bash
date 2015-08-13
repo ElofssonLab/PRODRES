@@ -21,7 +21,7 @@ fi
 
 
 # This actually does the work.
-python `pwd`/pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/
+python `pwd`/pfam_scan_to_profile_abisko.py ${infile_path}.fa $tmpdir/
 
 $blastdir/bin/makeblastdb -in ${infile_path}.hits.db -dbtype prot -logfile /dev/null
 $blastdir/bin/legacy_blast.pl blastpgp -j 2 -i ${infile_path}.fa -d ${infile_path}.hits.db -e 1.e-5 -v 0 -b 100 -a 4 -C ${infile_path}.chk -Q ${infile_path}.psi  -o ${infile_path}.blast   --path $blastdir/bin/   >/dev/null
