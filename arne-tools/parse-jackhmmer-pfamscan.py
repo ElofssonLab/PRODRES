@@ -15,9 +15,9 @@ from Bio import SearchIO
 #from Bio.SeqFeature import SeqFeature, FeatureLocation
 from pprint import pprint
 
-pfam_Dir = "/Users/arnee/Projects/FastPSSM/data/Pfam/"
-pfamseqdb = "/Users/arnee/Projects/FastPSSM/data/pfamfull/uniref100.pfam27.pfamseq.nr90"
-pfamScan = "/Users/arnee/Projects/FastPSSM/bin/PfamScan/pfam_scan.pl"
+pfam_Dir = "/home/a/arnee/FastPSSM/data/Pfam/"
+pfamseqdb = "/home/a/arnee/FastPSSM/data/pfamfull/uniref100.pfam27.pfamseq.nr90"
+pfamScan = "/home/a/arnee/FastPSSM/bin/PfamScan/pfam_scan.pl"
 # Perhaps better to us pfamScan than hmmscan ??
 
 cutoff=0.001
@@ -79,9 +79,9 @@ def main(argvs):
 
 
     if (not os.path.isfile(SeqPfamScan)):
-        os.system("hmmscan --cpu 4 --domtblout " + SeqDomtab  +  "  -o  " + SeqOut + "  "+ PfamDB + " " + SeqFile )
-        sCmd = "perl " + pfamScan + " -fasta " + input_file + " -dir " + pfam_Dir + " -outfile " + SeqPfamScan
-    os.system(sCmd)
+        print  "perl " + pfamScan + " -fasta " + SeqFile + " -dir " + pfam_Dir + " -outfile " + SeqPfamScan
+        sCmd = "perl " + pfamScan + " -fasta " + SeqFile + " -dir " + pfam_Dir + " -outfile " + SeqPfamScan
+        os.system(sCmd)
 
     pfamList = []
     pattern = "# <seq id> <alignment start> <alignment end> <envelope start> <envelope end> <hmm acc> <hmm name> <type> <hmm start> <hmm end> <hmm length> <bit score> <E-value> <significance> <clan>"
@@ -89,6 +89,7 @@ def main(argvs):
     query=[]
     with open(SeqPfamScan) as inFile:
         for line in inFile:
+            print "TEST ",line,bFoundStart
             if line.find(pattern) != -1:
                 bFoundStart = True
             if bFoundStart is True:
