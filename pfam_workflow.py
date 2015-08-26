@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 import time
 from Bio import SeqIO
 
@@ -15,15 +16,18 @@ def main(args):
 
     with open(inFile, "rU") as seqFile:
         for entry in list(SeqIO.parse(seqFile, "fasta")):
-            tmpDir = outDir + entry.id + "/"
+            filename = "DIR-"+re.sub(r'\|','-',entry.id)
 
+            tmpDir = outDir + filename + "/"
+            print tmpDir
+            
             if os.path.exists(tmpDir) is False:
                 os.mkdir(tmpDir)
 
             with open(tmpDir + "query.fa", "w") as outFile:
                 outFile.write(">" + str(entry.id) + "\n" + str(entry.seq))
 
-            os.system("./fa2prfs_pfamscan.sh " + tmpDir + " " + blastDir);
+            os.system("./fa2prfs_pfamscan_arne.bash " + tmpDir + " " + blastDir);
 
 
             #Run predictors here

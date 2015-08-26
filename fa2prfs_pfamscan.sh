@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -28,7 +28,7 @@ fi
 
 #echo "python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/"
 
-python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/
+python `pwd`/pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/
 #exit;
 #$bindir/msa62fasta_oneround.pl ${infile_path}.blast > ${infile_path}.hits.db
 
@@ -36,11 +36,15 @@ python pfam_scan_to_profile.py ${infile_path}.fa $tmpdir/
 #echo "$blastdir/bin/formatdb -i ${infile_path}.hits.db -l /dev/null"
 #echo "formatdb"
 $blastdir/bin/formatdb -i ${infile_path}.hits.db -l /dev/null
+#/usr/local/ncbi/blast/bin/legacy_blast.pl  formatdb -i ${infile_path}.hits.db -l --path  /usr/local/ncbi/blast/bin/ 
+#$blastdir/bin/makeblastdb -in ${infile_path}.hits.db -dbtype prot -logfile /dev/null
 
 #echo "$blastdir/bin/blastpgp -j 2 -i ${infile_path}.fa -d ${infile_path}.hits.db -e 10 -v 0 -b 1000000 -a 4 -C ${infile_path}.chk -Q ${infile_path}.psi >/dev/null"
 
 #echo "psi blast"
 $blastdir/bin/blastpgp -j 2 -i ${infile_path}.fa -d ${infile_path}.hits.db -e 1.e-5 -v 0 -b 100 -a 4 -C ${infile_path}.chk -Q ${infile_path}.psi -m 6 -o ${infile_path}.blast  >/dev/null
+#$blastdir/bin/legacy_blast.pl blastpgp -j 2 -i ${infile_path}.fa -d ${infile_path}.hits.db -e 1.e-5 -v 0 -b 100 -a 4 -C ${infile_path}.chk -Q ${infile_path}.psi  -o ${infile_path}.blast   --path $blastdir/bin/   >/dev/null
+
 
 #echo "Enable for Scampi"
 #$bindir/msa62mod_oneround.pl ${infile_path}.blast ${infile_path}.fa > ${infile_path}.raw.prf
