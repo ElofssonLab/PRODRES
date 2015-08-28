@@ -49,7 +49,7 @@ fi
 infile=$1
 #if [ $# -eq 2 ]; then
 #    echo "HEJ"
-    outfile=`echo $1 | sed 's/fasta\//HMM\//'`
+    outfile=`echo $1 | sed 's/fasta\//HMM\// | sed 's/\.FASTA/\.HMM/ '`
 #else
 #    outfile=$2
 #fi
