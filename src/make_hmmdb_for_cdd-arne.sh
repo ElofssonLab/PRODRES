@@ -17,7 +17,7 @@ Examples:
     $0 foo/cdd/fasta//1xyz.fa  -  foo/cdd/HMM/1xyz.hmm
 "
 
-
+BIN=/home/a/arnee/bin/
 
 IsProgExist(){ #{{{
     # usage: IsProgExist prog
@@ -36,9 +36,9 @@ BuildHMM(){
     local alnfile_nocons=$tmpdir/fasta/${rootname}.nocons.fasta
     local alnfile_nocons_sto=$tmpdir/sto/${rootname}.nocons.sto
     local hmmfile=$tmpdir/hmms/${rootname}.hmm
-    /home/a/arnee/git/FastPSSM/src/exclude_consensus_from_fasta.py $alnfile -outpath $tmpdir/fasta
+    /home/a/arnee/git/FastPSSM/src/exclude_consensus_and_identical_from_fasta.py $alnfile -outpath $tmpdir/fasta
     seqmagick convert $alnfile_nocons $alnfile_nocons_sto
-    hmmbuild -n $rootname $hmmfile $alnfile_nocons_sto
+    $BIN/hmmbuild -n $rootname $hmmfile $alnfile_nocons_sto
 }
 
 
@@ -48,8 +48,7 @@ if [ $# -lt 1 ]; then
 fi
 infile=$1
 #if [ $# -eq 2 ]; then
-#    echo "HEJ"
-    outfile=`echo $1 | sed 's/fasta\//HMM\// | sed 's/\.FASTA/\.HMM/ '`
+    outfile=`echo $1 | sed 's/fasta\//HMM\//' | sed 's/\.FASTA/\.HMM/'`
 #else
 #    outfile=$2
 #fi
@@ -63,9 +62,9 @@ fileList=()
 
 
 IsProgExist seqmagick
-IsProgExist "/home/a/arnee/git/FastPSSM/src/exclude_consensus_from_fasta.py"
-IsProgExist hmmbuild
-IsProgExist hmmpress
+IsProgExist "/home/a/arnee/git/FastPSSM/src/exclude_consensus_and_identical_from_fasta.py"
+IsProgExist $BIN/hmmbuild
+IsProgExist $BIN/hmmpress
 
 
 
@@ -74,14 +73,14 @@ mkdir -p $tmpdir/hmms
 mkdir -p $tmpdir/fasta
 mkdir -p $tmpdir/sto
 
-echo "tmpdir = $tmpdir"
+# echo "tmpdir = $tmpdir"
 
 
 
 
 if [ -e $outfile ]
 then
-    echo "outfile exist", $oufile
+    # echo "outfile exist", $outfile
     exit 1 
 else 
     outdir=`dirname $outfile`
@@ -91,8 +90,8 @@ else
     fi
     BuildHMM "$infile"
     mv $tmpdir/hmms/*hmm $outfile 
-    hmmpress -f $outfile
+    $BIN/hmmpress -f $outfile
 fi 
 
 
-#rm -rf $tmpdir
+rm -rf $tmpdir
