@@ -9,4 +9,12 @@
 #SBATCH --output=out/hmmscan.%J.out
 #SBATCH --error=err/hmmscan.%J.err
 
-srun /home/a/arnee/FastPSSM/bin/runhmmscan.bash $*
+for i in data/uniref100.fasta.split-*.names
+do 
+    j=`basename $i`
+    if [ !  -e out/$j.out ]
+    then
+	srun -A snic2015-10-12 --time=24:00:00 -n 1 -c 6 /home/a/arnee/FastPSSM/bin/runhmmscan.bash $i 
+#	/home/a/arnee/FastPSSM/bin/runhmmscan.bash $i
+    fi
+done
