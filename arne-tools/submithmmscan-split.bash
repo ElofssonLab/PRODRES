@@ -9,14 +9,14 @@
 #SBATCH --output=out/hmmscan.%J.out
 #SBATCH --error=err/hmmscan.%J.err
 
-for i in data/uniref-split/uniref100.fasta.split-10000-100*.fasta
+for i in data/uniref-split/uniref100.fasta.split-10000-*.fasta
 do 
     j=`basename $i .fasta`
     d=`dirname $i` 
     l=`echo $d| sed s/data/results/`
     if [ ! -e $l/CDD/$j.CDD.domtbl ]
     then
-	srun -A snic2015-10-12 --time=04:00:00 -n 1 -c 6 /home/a/arnee/FastPSSM/bin/runhmmscan-split.bash $i &
+	srun -A snic2015-10-12 --time=24:00:00 -n 1 -c 6 /home/a/arnee/FastPSSM/bin/runhmmscan-split.bash $i &
 #	/home/a/arnee/FastPSSM/bin/runhmmscan.bash $i
     fi
 done
