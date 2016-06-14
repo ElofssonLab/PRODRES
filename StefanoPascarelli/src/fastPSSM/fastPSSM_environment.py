@@ -7,7 +7,7 @@ from subprocess import call
 
 
 
-class ENVIRONMENT_TEST:
+class ENVIRONMENT:
 
     #STATIC VARIABLES
     pfam = "/home/stefano/sweDATA/glob/pfam/"
@@ -16,9 +16,9 @@ class ENVIRONMENT_TEST:
 
     def __init__(self):
 
-        self.pfam = ENVIRONMENT_TEST.pfam
-        self.pfamscan = ENVIRONMENT_TEST.pfamscan
-        self.dbdimension = ENVIRONMENT_TEST.pfam_database_dimension
+        self.pfam = ENVIRONMENT.pfam
+        self.pfamscan = ENVIRONMENT.pfamscan
+        self.dbdimension = ENVIRONMENT.pfam_database_dimension
         self.input_file = ""
         self.psiblast = False
         self.jackhmmer = True
@@ -99,4 +99,4 @@ class ENVIRONMENT_TEST:
         return True
 
 
-c = ENVIRONMENT_TEST()
+c = ENVIRONMENT()
