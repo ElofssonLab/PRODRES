@@ -1,5 +1,5 @@
 import sys
-from fastPSSM_environment import ENVIRONMENT_TEST
+from fastPSSM_environment import ENVIRONMENT
 from fastPSSM_parser import INPUT_PARSER
 from fastPSSM_CDR import COMMON_DOMAINS_REDUCTION
 
