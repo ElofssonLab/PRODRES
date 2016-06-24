@@ -33,6 +33,10 @@ extra parameters up to now:
                 --jackhmmer_iter <# of iterations>:     set the number of iterations for jackhmmer (default is 3)
                 --jackhmmer_e-val <e-value>:            set the e-value threshold for jackhmmer
                 --jackhmmer_bitscore <bitscore>:        set the bitscore threshold for jackhmmer (default is 25)
+                --psiblast_iter <# of iterations>:      set the number of iterations for psiblast (default is 3)
+                --psiblast_e-val <e-value>:             set the e-value threshold for psiblast (default is 0.1)
+                --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
             example call:
+				python fastPSSM.py --input test/prova1.fa --output test/prova1/ --psiblast

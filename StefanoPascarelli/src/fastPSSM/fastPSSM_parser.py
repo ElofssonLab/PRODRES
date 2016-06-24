@@ -63,6 +63,31 @@ def INPUT_PARSER(argv,env):
             paramlist.remove(bs)
             paramlist.remove("jackhmmer_bitscore")
 
+        # psiblast PARAMETERS
+        if "psiblast_iter" in paramlist:
+            iter = paramlist[paramlist.index("psiblast_iter") + 1]
+            env.param_psiblast[0] = iter
+            paramlist.remove(iter)
+            paramlist.remove("psiblast_iter")
+
+        if "psiblast_e-val" in paramlist:
+            eval = paramlist[paramlist.index("psiblast_e-val") + 1]
+            env.param_jackhmmer[1] = " -evalue " + eval + " "
+            paramlist.remove(eval)
+            paramlist.remove("psiblast_e-val")
+
+        # if "psiblast_bitscore" in paramlist:
+        #     bs = paramlist[paramlist.index("jackhmmer_bitscore") + 1]
+        #     env.param_jackhmmer[1] = " --incT " + bs + " "
+        #     paramlist.remove(bs)
+        #     paramlist.remove("jackhmmer_bitscore")
+
+        if "psiblast_outfmt" in paramlist:
+            psi_out = paramlist[paramlist.index("psiblast_outfmt") + 1]
+            env.param_psiblast[2] = " -outfmt "+psi_out+" "
+            paramlist.remove(psi_out)
+            paramlist.remove("psiblast_outfmt")
+
         # OUTPUT FOLDER
         if "output" in paramlist:
             env.output_folder = paramlist[paramlist.index("output") + 1]
@@ -86,6 +111,9 @@ def INPUT_PARSER(argv,env):
                 --jackhmmer_iter <# of iterations>:     set the number of iterations for jackhmmer (default is 3)
                 --jackhmmer_e-val <e-value>:            set the e-value threshold for jackhmmer
                 --jackhmmer_bitscore <bitscore>:        set the bitscore threshold for jackhmmer (default is 25)
+                --psiblast_iter <# of iterations>:      set the number of iterations for psiblast (default is 3)
+                --psiblast_e-val <e-value>:             set the e-value threshold for psiblast (default is 0.1)
+                --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
             example call:""")

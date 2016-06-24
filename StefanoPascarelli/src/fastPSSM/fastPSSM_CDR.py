@@ -66,7 +66,7 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
 
         os.system("rm " + outdir + "QUERY.hits.db.temp")  # remove this if you want to check temp db, but I remember I did already back in the time when I was young
 
-        #PERFORMING JACKHMMER / PSIBLAST
+        #  PERFORMING JACKHMMER
         if env.jackhmmer:
             outfile = outdir + "/tableOut.txt"
             dbfile = outdir + "/QUERY.hits.db"
@@ -82,7 +82,24 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
             os.system(jackhmmer_cmd)
             print("\t\t>end of details")
 
+        # PERFORMING PSIBLAST
+        if env.psiblast:
 
+            # prepare db
+            dbfile = outdir + "/QUERY.hits.db"
+            os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
+            dbfile += ".blastdb"
+            # prepare other param
+            outfile = outdir + "/psiOutput.txt "
+            pssmfile = outdir + "/psiPSSM.txt "
+            NofIter, threshold, out_type = env.param_psiblast
+
+            psiblast_cmd = "psiblast -num_iterations " + NofIter + " -out " + outfile + threshold +\
+                           " -dbsize " + env.dbdimension + " -out_pssm "+pssmfile+" -query " + input_file + " -db " + dbfile
+            print "\t>performing>>"+psiblast_cmd
+            print("\t\t>details on psiblast that I am doing and are topsecret")
+            os.system(psiblast_cmd)
+            print("\t\t>end of details")
 
 
 

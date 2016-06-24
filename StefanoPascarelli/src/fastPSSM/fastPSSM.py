@@ -26,7 +26,7 @@ def main(argv):
 
     print("Beginning Environment testing...")
 
-    env = ENVIRONMENT_TEST()
+    env = ENVIRONMENT()
 
     print("Ending Environment testing.")
 

@@ -13,6 +13,7 @@ class ENVIRONMENT:
     pfam = "/home/stefano/sweDATA/glob/pfam/"
     pfamscan = "/home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl"
     pfam_database_dimension = "28332677"
+    test = True
 
     def __init__(self):
 
@@ -25,20 +26,21 @@ class ENVIRONMENT:
         self.output_folder = ""
 
         #  CHECKS
-        a=self.check_bash()
+        if self.test:
+            a = self.check_bash()
 
-        b=self.check_python()
+            b = self.check_python()
 
-        c=self.check_hmmer()
+            c = self.check_hmmer()
 
-        d=self.check_pfam()
+            d = self.check_pfam()
 
-        e=self.check_pfamscan()
+            e = self.check_pfamscan()
 
-        f=self.check_more()
+            f = self.check_psiblast()
 
-        if not (a and b and c and d and e and f):
-            sys.exit("CHECKS WENT WRONG")
+            if not (a and b and c and d and e and f):
+                sys.exit("CHECKS WENT WRONG")
 
         #DEFAULT PARAMETERS
         self.param_pfamscan = [" 10 ", " -clan_overlap "] # DEFAULTS
@@ -47,8 +49,8 @@ class ENVIRONMENT:
         self.param_jackhmmer = ["3", " --incT 25 "]  # DEFAULTS
         # [N of iterations, bitscore inclusion threshold (around 0.1 e-val)]
 
-        self.param_psiblast = []
-        # TO DO
+        self.param_psiblast = ["3", " -evalue 0.1 ", ""]  # DEFAULTS
+        # [N of iter, eval default threshold, default outformat
 
 #  CHECKS
     def check_bash(self):
@@ -95,7 +97,14 @@ class ENVIRONMENT:
             sys.exit("ERROR: pfamscan.pl not found or didn't work")
         return True
 
-    def check_more(self):
+    def check_psiblast(self):
+
+        print(">>> TESTING psiblast PRESENCE <<<\n")
+        try:
+            retcode = call("psiblast")
+        except OSError as e:
+            sys.exit("ERROR: psiblast not found as bash command")
+
         return True
 
 
