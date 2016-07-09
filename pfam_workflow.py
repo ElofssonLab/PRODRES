@@ -27,7 +27,7 @@ def main(args):
             with open(tmpDir + "query.fa", "w") as outFile:
                 outFile.write(">" + str(entry.id) + "\n" + str(entry.seq))
 
-            os.system("./fa2prfs_pfamscan_arne.bash " + tmpDir + " " + blastDir);
+            os.system("./fa2prfs_pfamscan.sh " + tmpDir + " " + blastDir);
 
 
             #Run predictors here
