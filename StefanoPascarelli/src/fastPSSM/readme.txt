@@ -40,3 +40,5 @@ extra parameters up to now:
 
             example call:
 				python fastPSSM.py --input test/prova1.fa --output test/prova1/ --psiblast
+
+pfamseq DB is from ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam30.0/

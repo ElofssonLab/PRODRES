@@ -1,4 +1,5 @@
 import os
+import re
 from subprocess import call
 import sys
 sys.path.append("./database_handling/")
@@ -18,10 +19,17 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
         elif entry.id == name:
             name= name+"+"
         else:
-            name = entry.id
+            try:
+                regexp = re.search(r"\|([^\|]+)\|",entry.id) # for names like tr|Q8XP35|Q8XP35_CLOPE/tr|Q8XP35|Q8XP35_CLOPE
+                name = regexp.group(1)
+            except AttributeError:
+                name = entry.id
+
+
+
 
         #specific entry outdir
-        outdir= env.output_folder + "/" + entry.id + "/"
+        outdir= env.output_folder + "/" + name + "/"
         if os.path.exists(outdir) is False:
             os.mkdir(outdir)
 
@@ -31,7 +39,7 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
 
         # single query file in output folder
         with open(outdir+"/query.fa","w") as queryfile:
-            queryfile.write(">" + str(entry.id) + "\n" + str(entry.seq))
+            queryfile.write(">" + str(name) + "\n" + str(entry.seq))
         input_file = outdir+"/query.fa"
 
         #PFAMSCAN
@@ -70,6 +78,10 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
         if env.jackhmmer:
             outfile = outdir + "/tableOut.txt"
             dbfile = outdir + "/QUERY.hits.db"
+            # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
+            if os.path.getsize(dbfile) == 0 and env.paramK:
+                print("WARNING! CDR database is void, performing search in ")
+                dbfile = env.uniprot
             aligfile = outdir + "/Alignment.txt"
             fullout = outdir + "/fullOut.txt "
             NofIter,threshold = env.param_jackhmmer
@@ -89,6 +101,9 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
             dbfile = outdir + "/QUERY.hits.db"
             os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
             dbfile += ".blastdb"
+            # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
+            if os.path.getsize(dbfile) == 0 and env.paramK:
+                dbfile = env.uniprot
             # prepare other param
             outfile = outdir + "/psiOutput.txt "
             pssmfile = outdir + "/psiPSSM.txt "

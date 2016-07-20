@@ -96,6 +96,11 @@ def INPUT_PARSER(argv,env):
             paramlist.remove(env.output_folder)
             paramlist.remove("output")
 
+        # EXTRA PARAM
+        if "verbose" in paramlist:
+            env.verbose = True
+            paramlist.remove("verbose")
+
         #### ARGV failure output ####
         if len(paramlist)!=0 or len(argv)<2 or env.input_file == "" or env.output_folder == "":
             sys.exit("ARGV: "+str(argv)+"""
@@ -114,6 +119,7 @@ def INPUT_PARSER(argv,env):
                 --psiblast_iter <# of iterations>:      set the number of iterations for psiblast (default is 3)
                 --psiblast_e-val <e-value>:             set the e-value threshold for psiblast (default is 0.1)
                 --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
+                --verbose:                              print initial phase checks
             [**] = compulsory parameter
 
             example call:""")

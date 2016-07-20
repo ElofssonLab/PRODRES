@@ -4,26 +4,28 @@ from subprocess import call
 
 
 
-
-
-
 class ENVIRONMENT:
 
     #STATIC VARIABLES
     pfam = "/home/stefano/sweDATA/glob/pfam/"
     pfamscan = "/home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl"
     pfam_database_dimension = "28332677"
+    uniprot_trembl = "/home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta"  # to do: check for it and db bin creator
     test = True
 
     def __init__(self):
 
         self.pfam = ENVIRONMENT.pfam
         self.pfamscan = ENVIRONMENT.pfamscan
+        self.uniprot = ENVIRONMENT.uniprot_trembl
         self.dbdimension = ENVIRONMENT.pfam_database_dimension
         self.input_file = ""
         self.psiblast = False
         self.jackhmmer = True
         self.output_folder = ""
+        self.verbose = False
+        self.stdout = open("/dev/null","w+")
+        self.paramK = True  # param Kostas (for doing something when reduced DB is void)
 
         #  CHECKS
         if self.test:
@@ -67,9 +69,13 @@ class ENVIRONMENT:
 
     def check_hmmer(self):
 
-        print(">>> TESTING jackhmmer PRESENCE <<<\n")
+        print(">>> TESTING jackhmmer PRESENCE <<<")
         try:
-            retcode = call("jackhmmer")
+            std = self.stdout
+            if self.verbose:
+                std = None
+            retcode = call("jackhmmer",stdout = std)
+            print "DONE!\n"
         except OSError as e:
             sys.exit("ERROR: hmmer not found as bash command")
 
@@ -92,7 +98,11 @@ class ENVIRONMENT:
         print(">>> TESTING Pfamscan.pl PRESENCE <<<\n")
         try:
             #cehckstustuf
-            retcode = call(self.pfamscan)
+            std = self.stdout
+            if self.verbose:
+                std = None
+            retcode = call(self.pfamscan,stdout=std)
+            print("Done!\n")
         except OSError as e:
             sys.exit("ERROR: pfamscan.pl not found or didn't work")
         return True
@@ -101,7 +111,11 @@ class ENVIRONMENT:
 
         print(">>> TESTING psiblast PRESENCE <<<\n")
         try:
-            retcode = call("psiblast")
+            std = self.stdout
+            if self.verbose:
+                std = None
+            retcode = call("psiblast",stdout=std)
+            print("Done!\n")
         except OSError as e:
             sys.exit("ERROR: psiblast not found as bash command")
 
