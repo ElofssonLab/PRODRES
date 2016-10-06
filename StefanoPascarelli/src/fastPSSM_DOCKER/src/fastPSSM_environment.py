@@ -7,10 +7,10 @@ from subprocess import call
 class ENVIRONMENT:
 
     #STATIC VARIABLES
-    pfam = "/db/pfam/"
-    pfamscan = "/opt/PfamScan/pfam_scan.pl"
+    pfam = "/home/stefano/sweDATA/glob/pfam/"
+    pfamscan = "/home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl"
     pfam_database_dimension = "28332677"
-    uniprot_trembl = "/db/uniprot/uniprot_trembl.fasta"  # to do: check for it and db bin creator
+    uniprot_trembl = "/home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta"  # to do: check for it and db bin creator
     test = True
 
     def __init__(self):
