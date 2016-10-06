@@ -126,10 +126,10 @@ def INPUT_PARSER(argv,env):
 
         ##### inputfile parsing #####
         with open(env.input_file,"rU") as seqFile:
-            input = list(SeqIO.parse(seqFile, "fasta"))
-            length = len(env.input_file)
+            inpt = list(SeqIO.parse(seqFile, "fasta"))
+            length = len(inpt)
             if length <=0:
                 sys.exit("ERROR IN READING INPUT FILE!")
             print("\t>>>Sequences found: "+str(length)+" <<<\n")
 
-        return input
+        return inpt
