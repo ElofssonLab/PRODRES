@@ -8,7 +8,7 @@
   - **uniprot_db**: /path/to/fall-back/database [e.g. Uniref90]
 
 - Running the workflow:
-  - Basic usage: python fastPSSM.py *parameters*
+  - Basic usage: `python fastPSSM.py *parameters*`
 
             parameters:
                 --input <input file>:                   needs to be in fasta format, can be one or more sequences [**]
