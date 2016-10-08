@@ -49,12 +49,5 @@ def main(argv):
     logging.info('\t> End.')
     logging.warning('Pipeline ended')
 
-  #   print("Beginning second search...")
-  #
-  # #  SECOND_SEARCH()
-  #
-  #   print("Ending second search.")
-
-
 if __name__ == '__main__':
     main(sys.argv)
