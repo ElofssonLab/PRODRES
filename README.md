@@ -8,7 +8,7 @@
   - **uniprot_db**: /path/to/uniprot|uniref/database
 
 - Running the workflow:
-  - Basic usage: python fastPSSM.py <param>
+  - Basic usage: python fastPSSM.py [param]
 
             parameters:
                 --input <input file>:                   needs to be in fasta format, can be one or more sequences [**]
