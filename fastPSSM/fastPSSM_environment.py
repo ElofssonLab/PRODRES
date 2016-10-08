@@ -6,18 +6,20 @@ from subprocess import call
 
 class ENVIRONMENT:
 
-    #STATIC VARIABLES
-    pfam = "/home/stefano/sweDATA/glob/pfam/"
-    pfamscan = "/home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl"
+    # adjust paths accordingly #
+    pfam = "/pfam/to/the/pfam/folder/"
+    pfamscan = "/path/to/pfam_scan.pl"
+    uniprot_db = "/path/to/uniprot|uniref/database"
+    # do DOT change anything below this line #
+
     pfam_database_dimension = "28332677"
-    uniprot_trembl = "/home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta"  # to do: check for it and db bin creator
     test = True
 
     def __init__(self):
 
         self.pfam = ENVIRONMENT.pfam
         self.pfamscan = ENVIRONMENT.pfamscan
-        self.uniprot = ENVIRONMENT.uniprot_trembl
+        self.uniprot = ENVIRONMENT.uniprot_db
         self.dbdimension = ENVIRONMENT.pfam_database_dimension
         self.input_file = ""
         self.psiblast = False
