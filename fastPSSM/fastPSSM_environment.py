@@ -2,8 +2,6 @@ import os
 import sys
 from subprocess import call
 
-
-
 class ENVIRONMENT:
 
     # adjust paths accordingly #
@@ -27,7 +25,7 @@ class ENVIRONMENT:
         self.output_folder = ""
         self.verbose = False
         self.stdout = open("/dev/null","w+")
-        self.paramK = True  # param Kostas (for doing something when reduced DB is void)
+        self.paramK = True  # fall-back option
 
         #  CHECKS
         if self.test:
