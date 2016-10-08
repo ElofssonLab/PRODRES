@@ -24,11 +24,11 @@
                 --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
-- example call for 1 sequence using PSI-BLAST to create the PSSM:
-  - `python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`
+- example call for 1 sequence using PSI-BLAST to create the PSSM:       
+`python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`
 
-- example call for multiple sequences using JACKHMMER to create the PSSM:
-  - `python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`
+- example call for multiple sequences using JACKHMMER to create the PSSM:        
+`python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`
 
 # fastPSSM Docker portable version 
 
@@ -36,8 +36,8 @@ in order to install:
 
 1. have DockerFile in the same folder of src/ and test/
 
-2. execute the following command (*remember the dot at the end*): 
-  - `docker build -t fastpssm .`
+2. execute the following command (*remember the dot at the end*):      
+`docker build -t fastpssm .`
 
 3. wait for the required databases to be downloaded
 
