@@ -27,5 +27,5 @@
 - example call for 1 sequence:
   - python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
 
-- example call for multipls sequences:
+- example call for multiple sequences:
   - python fastPSSM.py --input test/multiple_seq.fa.fa --output test/rst_many_seqs/ --jackhmmer
