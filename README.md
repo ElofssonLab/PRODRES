@@ -1,7 +1,7 @@
 # FastPSSM : Fast generation of Position-Specific Scoring Matrices
 
 + Download (or clone) the FastPSSM Git repository
-+ Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM-master/ folder 
++ Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM folder that is created 
 
 # There are three pathes in fastPSSM_environment.py that need to be adjusted:
 
