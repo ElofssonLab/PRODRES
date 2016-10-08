@@ -4,10 +4,9 @@
 + Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM folder that is created 
 
 + There are three pathes in fastPSSM_environment.py that need to be adjusted:
-
--- pfam: /pfam/to/the/pfam/folder/ 
--- pfamscan: /path/to/pfam_scan.pl
--- uniprot_db: /path/to/uniprot|uniref/database
+  -- pfam: /pfam/to/the/pfam/folder/ 
+  -- pfamscan: /path/to/pfam_scan.pl
+  -- uniprot_db: /path/to/uniprot|uniref/database
 
 Running the workflow:
 
