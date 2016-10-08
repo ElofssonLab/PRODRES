@@ -1,1 +1,0 @@
-pscan Evalue=100 clan_overlap=True
