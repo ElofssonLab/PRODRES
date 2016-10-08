@@ -8,6 +8,11 @@
   -- pfamscan: /path/to/pfam_scan.pl
   -- uniprot_db: /path/to/uniprot|uniref/database
 
+- Dashes work just as well
+- And if you have sub points, put two spaces before the dash or star:
+  - Like this
+  - And this
+  
 Running the workflow:
 
 >>>fastPSSM pipeline<<<
