@@ -50,8 +50,6 @@ in order to install:
     - python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer
 
 4b. or you can import an input folder from local machine with: 
-    - docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm
-    - then access fastpssm/ folder and call the pipeline to the imported data: 
-    - python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/
-
-
+  - docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm
+  - then access fastpssm/ folder and call the pipeline to the imported data: 
+  - python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/
