@@ -29,3 +29,23 @@
 
 - example call for multiple sequences using JACKHMMER to create the PSSM:
   - python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer
+
+# fastPSSM Docker portable version 
+
+in order to install: 
+1) have DockerFile in the same folder of src/ and test/
+
+2) execute the following command (**remember the dot at the end**): docker build -t fastpssm .
+
+3) wait for the long build that require databases to be downloaded
+
+4a) you can access the virtual machine with ready-to-execute fastpssm pipeline using: 
+    - docker run -t -i fastpssm
+    - then access /fastpssm/ folder and call the pipeline: 
+  - python fastPSSM.py --input /test/single_seq.fa --output /test/rst_1_seq/ -- psiblast
+
+4b) or you can import an input folder from local machine with: docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm
+    then access /fastpssm/ and call the pipeline to the imported data: python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/
+
+    Contact GitHub API Training Shop Blog About 
+
