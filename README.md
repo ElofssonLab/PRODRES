@@ -5,7 +5,7 @@
 
 + There are three pathes in fastPSSM_environment.py that need to be adjusted:
 
-pfam: /pfam/to/the/pfam/folder/ 
+-- pfam: /pfam/to/the/pfam/folder/ 
 pfamscan: /path/to/pfam_scan.pl
 uniprot_db: /path/to/uniprot|uniref/database
 
