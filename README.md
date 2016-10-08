@@ -41,7 +41,7 @@ in order to install:
 
 3. wait for the required databases to be downloaded
 
-4a. you can access the virtual machine with the ready-to-execute fastpssm pipeline using:     
+4. Access the virtual machine with a ready-to-execute fastpssm pipeline using:              
 `docker run -t -i fastpssm`
   - then access fastpssm/ folder and call the pipeline     
   - example call for 1 sequence using PSI-BLAST to create the PSSM:    
@@ -49,7 +49,7 @@ in order to install:
   - example call for multiple sequences using JACKHMMER to create the PSSM:    
   `python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`    
 
-4b. or you can import an input folder from local machine with:     
+5. Alternatively, import an input folder from local machine with:     
   `docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm`     
   then access fastpssm/ folder and call the pipeline to the imported data:      
   `python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/`    
