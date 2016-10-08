@@ -7,9 +7,7 @@
   - pfamscan: /path/to/pfam_scan.pl
   - uniprot_db: /path/to/uniprot|uniref/database
 
-Running the workflow:
-
->>>fastPSSM pipeline<<<
+- Running the workflow:
             usage: python fastPSSM.py <param>
 
             parameters:
@@ -26,8 +24,8 @@ Running the workflow:
                 --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
-example call for 1 sequence:
-python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
+- example call for 1 sequence:
+  - python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
 
-example call for multipls sequences:
-python fastPSSM.py --input test/multiple_seq.fa.fa --output test/rst_many_seqs/ --jackhmmer
+- example call for multipls sequences:
+  - python fastPSSM.py --input test/multiple_seq.fa.fa --output test/rst_many_seqs/ --jackhmmer
