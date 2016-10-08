@@ -42,8 +42,8 @@ in order to install:
 3. wait for the required databases to be downloaded
 
 4a. you can access the virtual machine with the ready-to-execute fastpssm pipeline using: 
-    - docker run -t -i fastpssm
-    - then access fastpssm/ folder and call the pipeline 
+  - docker run -t -i fastpssm
+  - then access fastpssm/ folder and call the pipeline 
 - example call for 1 sequence using PSI-BLAST to create the PSSM:
   - python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
 
