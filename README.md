@@ -36,7 +36,8 @@ in order to install:
 
 1. have DockerFile in the same folder of src/ and test/
 
-2. execute the following command (*remember the dot at the end*): docker build -t fastpssm .
+2. execute the following command (*remember the dot at the end*): 
+  - docker build -t fastpssm .
 
 3. wait for the long build that require databases to be downloaded
 
