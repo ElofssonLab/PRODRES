@@ -1,12 +1,5 @@
 #!/bin/env python
 
-# Description:
-#   this is a base module, it will not import any self created modules
-#
-# Author: Nanjiang Shu (nanjiang.shu@scilifelab.se)
-#
-# Address: Science for Life Laboratory Stockholm, Box 1031, 17121 Solna, Sweden
-
 def FloatDivision(x1, x2):#{{{
     """
     Return the division of two values

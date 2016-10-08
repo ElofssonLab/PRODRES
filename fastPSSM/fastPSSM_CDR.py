@@ -3,11 +3,10 @@ import re
 from subprocess import call
 import sys
 sys.path.append("./database_handling/")
-import myfunc   # Nanjiang scripts
+import myfunc
 import logging
 
 def COMMON_DOMAINS_REDUCTION(env,inp):
-
 
     input_length = len(inp)
     counter = 1
@@ -27,7 +26,6 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
                 name = entry.id
 
         logging.info("\t\t> WORKING ON: {}".format(name))
-
 
         #specific entry outdir
         namedir= env.output_folder + "/" + name + "/"
@@ -78,7 +76,7 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
                         pfamList.append(line[pos:pos + 7])
         pfam_seq_db = env.pfam+"/pfamfull/uniref100.pfam27.pfamseq.nr90"
 
-        # Nanjiang script for handling the Pfam DB
+        # handling the Pfam DB
         createHitDB(list(set(pfamList)), tempdir, pfam_seq_db)
 
         os.system("rm " + tempdir + "QUERY.hits.db.temp")  # remove this if you want to check temp db, but I remember I did already back in the time when I was young
@@ -100,8 +98,6 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
             jackhmmer_cmd = "jackhmmer -N " + NofIter + " --noali -o " + fullout + threshold + "--tblout " + \
                         outfile + " -A " + aligfile + " -Z " + env.dbdimension + " --chkhmm " + hmmfile + " " + \
                         input_file + " " + dbfile
-            #print jackhmmer_cmd
-            #print("\t\t>details on jackhmmer that I am doing and are topsecret")
             logging.info("\t\t\t> running jackhmmer search: {}".format(jackhmmer_cmd))
             os.system(jackhmmer_cmd)
             os.system("cp " + hmmfile + "-3.hmm " + outputdir+"hmmOut.txt")
@@ -127,18 +123,14 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
             psiblast_cmd = "psiblast -num_iterations " + NofIter + " -out " + outfile + threshold +\
                            " -dbsize " + env.dbdimension + " -out_pssm "+pssmfile+" -query " + input_file + " -db " + dbfile
             print("\t>performing>>"+psiblast_cmd)
-            #print("\t\t>details on psiblast that I am doing and are topsecret")
             logging.info("\t\t\t> running psiblast search: {}".format(psiblast_cmd))
             os.system(psiblast_cmd)
             print("\t\t>end")
-
-
 
 def createHitDB(pfamList, work_dir,pfamseqdb):
     logging.info("\t\t\t> constructing CDR database")
     hdl = myfunc.MyDB(pfamseqdb)
     if hdl.failure:
-        #        print "Error"
         return 1
     with open(work_dir + "QUERY.hits.db.temp", "w") as outFile:
         for pfamid in pfamList:

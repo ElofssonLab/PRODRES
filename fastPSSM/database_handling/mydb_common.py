@@ -1,12 +1,5 @@
 #!/bin/env python
 
-# Description:
-#   A collection of classes and functions used by the class MyDB
-#
-# Author: Nanjiang Shu (nanjiang.shu@scilifelab.se)
-#
-# Address: Science for Life Laboratory Stockholm, Box 1031, 17121 Solna, Sweden
-
 import sys
 import os
 from array import array
