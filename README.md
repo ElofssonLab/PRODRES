@@ -24,8 +24,8 @@
                 --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
-- example call for 1 sequence:
+- example call for 1 sequence using PSI-BLAST to create the PSSM:
   - python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
 
-- example call for multiple sequences:
+- example call for multiple sequences using JACKHMMER to create the PSSM:
   - python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer
