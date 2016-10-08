@@ -1,6 +1,6 @@
 # FastPSSM : Fast generation of Position-Specific Scoring Matrices
 
-+ Download (or clone) the FastPSSM Git repository
+* Download (or clone) the FastPSSM Git repository
 + Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM folder that is created 
 
 + There are three pathes in fastPSSM_environment.py that need to be adjusted:
@@ -28,5 +28,8 @@ Running the workflow:
                 --psiblast_outfmt <int_value>:          set the outformat for psiblast, refer to blast manual
             [**] = compulsory parameter
 
-example call:
-python fastPSSM.py --input test/prova1.fa --output test/prova1/ --psiblast
+example call for 1 sequence:
+python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast
+
+example call for multipls sequences:
+python fastPSSM.py --input test/multiple_seq.fa.fa --output test/rst_many_seqs/ --jackhmmer
