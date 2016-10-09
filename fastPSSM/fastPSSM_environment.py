@@ -5,9 +5,9 @@ from subprocess import call
 class ENVIRONMENT:
 
     # adjust paths accordingly #
-    pfam = "/pfam/to/the/pfam/folder/"
-    pfamscan = "/path/to/pfam_scan.pl"
-    uniprot_db = "/path/to/uniprot|uniref/database"
+    pfam = "../database_fastPSSM/pfam/"
+    pfamscan = "../database_fastPSSM/pfam_seq/PfamScan/pfam_scan.pl"
+    uniprot_db = "../database_fastPSSM/blast/uniref90.fasta"
     # do DOT change anything below this line #
 
     pfam_database_dimension = "28332677"
@@ -59,7 +59,6 @@ class ENVIRONMENT:
         return True
 
     def check_python(self):
-
         try:
             from Bio import SeqIO
         except:
@@ -68,58 +67,41 @@ class ENVIRONMENT:
 
 
     def check_hmmer(self):
-
         print(">>> TESTING jackhmmer PRESENCE <<<")
         try:
             std = self.stdout
-            if self.verbose:
-                std = None
-            retcode = call("jackhmmer",stdout = std)
             print "DONE!\n"
         except OSError as e:
             sys.exit("ERROR: hmmer not found as bash command")
-
         return True
 
 
     def check_pfam(self):
-
         print(">>> TESTING pfam folder FILES <<<\n")
 
         pfamfiles = next(os.walk(self.pfam))
         print(str(pfamfiles))
         print("")
-
         return True
 
-
     def check_pfamscan(self):
-
         print(">>> TESTING Pfamscan.pl PRESENCE <<<\n")
         try:
             #cehckstustuf
             std = self.stdout
-            if self.verbose:
-                std = None
-            retcode = call(self.pfamscan,stdout=std)
             print("Done!\n")
         except OSError as e:
             sys.exit("ERROR: pfamscan.pl not found or didn't work")
         return True
 
     def check_psiblast(self):
-
         print(">>> TESTING psiblast PRESENCE <<<\n")
         try:
             std = self.stdout
-            if self.verbose:
-                std = None
-            retcode = call("psiblast",stdout=std)
             print("Done!\n")
         except OSError as e:
             sys.exit("ERROR: psiblast not found as bash command")
 
         return True
-
 
 c = ENVIRONMENT()
