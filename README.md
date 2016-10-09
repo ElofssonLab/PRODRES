@@ -2,7 +2,7 @@
 
 - Download (or clone) the FastPSSM Git repository
 - Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM folder 
-- There are three paths in fastPSSM_environment.py that need to be adjusted in case you do not use the database as-is):
+- There are three paths in fastPSSM_environment.py that need to be adjusted in case you do not use the database as-is:
   - **pfam**: /pfam/to/the/pfam/folder/
   - **pfamscan**: /path/to/pfam_scan.pl
   - **uniprot_db**: /path/to/fall-back/database [e.g. Uniref90]
