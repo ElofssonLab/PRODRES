@@ -125,7 +125,7 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
             NofIter, threshold, out_type = env.param_psiblast
 
             psiblast_cmd = "psiblast -num_iterations " + NofIter + " -out " + outfile + threshold +\
-                           " -dbsize " + env.dbdimension + " -out_pssm "+pssmfile+" -query " + input_file + " -db " + dbfile
+                           " -dbsize " + env.dbdimension + " -out_ascii_pssm "+pssmfile+" -query " + input_file + " -db " + dbfile
             print("\t>performing>>"+psiblast_cmd)
             #print("\t\t>details on psiblast that I am doing and are topsecret")
             logging.info("\t\t\t> running psiblast search: {}".format(psiblast_cmd))
