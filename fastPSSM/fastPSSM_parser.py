@@ -72,7 +72,7 @@ def INPUT_PARSER(argv,env):
 
         if "psiblast_e-val" in paramlist:
             eval = paramlist[paramlist.index("psiblast_e-val") + 1]
-            env.param_jackhmmer[1] = " -evalue " + eval + " "
+            env.param_psiblast[1] = " -evalue " + eval + " "
             paramlist.remove(eval)
             paramlist.remove("psiblast_e-val")
 
