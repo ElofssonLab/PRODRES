@@ -115,6 +115,10 @@ def COMMON_DOMAINS_REDUCTION(env,inp):
                 dbfile = env.uniprot
                 print("WARNING! CDR database is void, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found void, searching in full DB")
+                # PREPARING FALLBACK DATABASE
+                if not os.path.exists(dbfile + ".blastdb.psq"):
+                    os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
+                    dbfile += ".blastdb"
             # prepare other param
             outfile = outputdir + "/psiOutput.txt "
             pssmfile = outputdir + "/psiPSSM.txt "
