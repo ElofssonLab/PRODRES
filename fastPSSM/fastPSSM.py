@@ -49,7 +49,7 @@ def create_parser(argv):
 
 def verify_consistency_of_arguments(args):
     """Verify that the command line are logically correct."""
-    if (args.jackhmmer_e_val != None && args.jackhmmer_bitscore != None):
+    if (args.jackhmmer_e_val != None and args.jackhmmer_bitscore != None):
         raise RuntimeError("both --jackhmmer_e-val and --jackhmmer_bitscore can not be specified at the same time")
     if (args.second_search == 'jackhmmer' and args.jackhmmer_threshold_type == None):
         raise RuntimeError("--jackhmmer-threshold-type is missing (required by --second-search=jackhmmer)")
