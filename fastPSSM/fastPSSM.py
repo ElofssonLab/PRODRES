@@ -6,17 +6,18 @@ import os
 import shutil
 import argparse
 from Bio import SeqIO
+import subprocess
 
 def create_parser(argv):
     """Create a command line parser with all arguments defined."""
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, fromfile_prefix_chars='@')
-    parser.add_argument('--pfamscan_e-val', default=10.0, type=float, help='e-value threshold for pfamscan passage')
+    parser.add_argument('--pfamscan_e-val', default="10.0", type=str, help='e-value threshold for pfamscan passage')
     parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
-    parser.add_argument('--jackhmmer_max_iter', type=int, default=3, help='set the maximum number of iterations for jackhmmer')
-    parser.add_argument('--jackhmmer_e-val', type=float, default=0.001, help='set the e-value threshold for jackhmmer')
-    parser.add_argument('--jackhmmer_bitscore', type=float, default=25.0, help='set the bitscore threshold for jackhmmer (jackhmmer option --incT)')
-    parser.add_argument('--psiblast_iter', type=int, default=3, help='set the number of iterations for psiblast')
-    parser.add_argument('--psiblast_e-val', type=float, default=0.1, help='set the e-value threshold for psiblast')
+    parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
+    parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer')
+    parser.add_argument('--jackhmmer_bitscore', type=str, default="25.0", help='set the bitscore threshold for jackhmmer (jackhmmer option --incT)')
+    parser.add_argument('--psiblast_iter', type=str, default="3", help='set the number of iterations for psiblast')
+    parser.add_argument('--psiblast_e-val', type=str, default="0.1", help='set the e-value threshold for psiblast')
 
     # A question:
     # Although --psiblast_outfmt is being listed as a command line option
@@ -32,7 +33,7 @@ def create_parser(argv):
     # Right now the option value is being used in the code
 
     parser.add_argument('--psiblast_outfmt', type=str, help='set the outformat for psiblast, refer to blast manual')
-    parser.add_argument('--input', dest=input_file, required=True, help='input file that needs to be in fasta format, can be one or more sequences')
+    parser.add_argument('--input', dest="input_file", required=True, help='input file that needs to be in fasta format, can be one or more sequences')
     parser.add_argument('--output', required=True, help='the path to the output folder. The folder will be created if it does not exist already.')
     parser.add_argument('--second-search', required=True, choices=['psiblast', 'jackhmmer'])
     parser.add_argument('--jackhmmer-threshold-type', choices=['e-value', 'bit-score'])
@@ -90,7 +91,8 @@ def verify_writable_directory_path(path):
 
 def verify_program_available_in_path_directories(program_name):
     """Verify that the program name is available in the environment PATH directories."""
-    prog = shutil.which(program_name)
+    prog =  subprocess.check_output("which {}".format(program_name),shell=True)
+    #   shutils.which is woking only in python 3+, while db handling python code is written in 2.7
     if prog == None:
         raise RuntimeError('The program is not available in the enviroment PATH directories: {}'.format(path))
 
@@ -110,7 +112,10 @@ def main(argv):
     subprocess.check_output(["jackhmmer", "-h"])
     subprocess.check_output(["psiblast", "-help"])
     subprocess.check_output(["python", "--version"])
-    subprocess.check_output([args.pfamscan_script, "-h"])
+    try:
+        subprocess.check_output([args.pfamscan_script,"-h"]) != None
+    except subprocess.CalledProcessError as e:
+     sys.exit("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
 
     if not os.path.exists(args.output):
         os.makedirs(args.output)
@@ -145,13 +150,14 @@ def main(argv):
     print("Ending Environment testing.")
     logging.info('\t> End.')
 
-    logging.info('\t> Input parsing...')
-    print("Beginning input parsing...")
+#    logging.info('\t> Input parsing...')
+#    print("Beginning input parsing...")
 
-    inp = INPUT_PARSER(argv, args)
+#    inp = INPUT_PARSER(argv, args)
 
-    print("Ending input parsing.")
-    logging.info('\t> End.')
+#    print("Ending input parsing.")
+#    logging.info('\t> End.')
+# ???
     logging.info('\t> CDR...')
 
     with open(args.input_file,"rU") as seqFile:
@@ -161,15 +167,15 @@ def main(argv):
             sys.exit("ERROR IN READING INPUT FILE!")
         print("\t>>>Sequences found: "+str(length)+" <<<\n")
         print("Beginning CDR...")
-        COMMON_DOMAINS_REDUCTION(env, inpt)
+        COMMON_DOMAINS_REDUCTION(args, inpt)
 
     print("Ending CDR.")
     logging.info('\t> End.')
     logging.warning('Pipeline ended')
   except IOError as e:
-    print("I/O error: {0}".format(e.strerror))
+    print("I/O error: {0}".format(e))
   except RuntimeError as e:
-    print("Runtime error: {0}".format(e.strerror))
+    print("Runtime error: {0}".format(e))
   except:
     print("Unexpected error")
     raise

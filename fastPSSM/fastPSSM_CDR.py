@@ -60,17 +60,18 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
         pfamscan_args = []
 
         if args.pfamscan_clan_overlap == True:
-            pfamscan_args += ["-clanoverlap"]
+            pfamscan_args += ["-clan_overlap"]
 
         pfamscan_args += ["-e_seq", args.pfamscan_e_val]
         pfamscan_args += ["-fasta", args.input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
-        pfamscan_args += ["-outfile ", pfam_output]
+        #pfamscan_args += ["> ", pfam_output]
 
         pfamscan_cmd = [args.pfamscan_script] + pfamscan_args
 
         logging.info("\t\t\t> running pfamscan.pl: {}".format(" ".join(pfamscan_cmd)))
-        call(pfamscan_cmd)
+        with open(pfam_output,"w") as outfile:
+            call(pfamscan_cmd,stdout=outfile)
 
         #READ PFAMSCAN OUTPUT
         pfamList = []
@@ -110,7 +111,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
             if (args.jackhmmer_threshold_type == "bit-score"):
                 jackhmmer_args += ["--incT", str(args.jackhmmer_bitscore)]
-            else if (args.jackhmmer_threshold_type == "e-value"):
+            elif (args.jackhmmer_threshold_type == "e-value"):
                 jackhmmer_args += ["--incE", str(args.jackhmmer_e_val)]
             else:
                 raise RuntimeError("Programming error. Unknown --jackhmmer-threshold-type value")
@@ -120,7 +121,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             jackhmmer_args += ["-Z", str(args.pfam_database_dimension)]
             jackhmmer_args += ["--chkhmm", hmmfile]
             jackhmmer_args += [input_file]
-            jackhmmer_args += [db_file]
+            jackhmmer_args += [dbfile]
 
             jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
             logging.info("\t\t\t> running jackhmmer search: {}".format(" ".join(jackhmmer_cmd)))
@@ -129,7 +130,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             print("\t\t>end")
 
         # PERFORMING PSIBLAST
-        else if args.second_search == "psiblast":
+        elif args.second_search == "psiblast":
             # prepare db
             dbfile = tempdir + "/QUERY.hits.db"
             os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
@@ -148,7 +149,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             pssmfile = outputdir + "/psiPSSM.txt"
 
             psiblast_args = []
-            psiblast_args += ["-num_iterations", str(args.psiblast_iter]
+            psiblast_args += ["-num_iterations", str(args.psiblast_iter)]
             psiblast_args += ["-out", outfile]
             psiblast_args += ["-evalue", args.psiblast_e_val]
             psiblast_args += ["-dbsize", str(args.pfam_database_dimension)]
@@ -156,13 +157,14 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             psiblast_args += ["-query", input_file]
             psiblast_args += ["-db", dbfile]
             if (args.psiblast_outfmt != None):
-                psiblast_args += ["-outfmt", args.psiblast_outfmt]                                                                              psiblast_cmd = ["psiblast"] + psiblast_args
+                psiblast_args += ["-outfmt", args.psiblast_outfmt]
+            psiblast_cmd = ["psiblast"] + psiblast_args
             psiblast_cmd_str = " ".join(psiblast_cmd)
             print("\t>performing>>"+ psiblast_cmd_str)
             logging.info("\t\t\t> running psiblast search: {}".format(psiblast_cmd_str))
             call(psiblast_cmd)
             print("\t\t>end")
-        else
+        else:
             raise RuntimeError("unknown option value of --second-search")
 
 def createHitDB(pfamList, work_dir,pfamseqdb):

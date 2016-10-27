@@ -1,1 +1,4 @@
 *.pyc
+/fastPSSM/logs/
+/fastPSSM_DOCKER/src/
+/fastPSSM_DOCKER/test/
