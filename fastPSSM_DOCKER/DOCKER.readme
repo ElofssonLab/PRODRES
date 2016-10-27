@@ -8,7 +8,34 @@ in order to install:
 3) wait for the long build that require databases to be downloaded
 
 4a) you can access the virtual machine ready to execute fastpssm with: docker run -t -i fastpssm
-    then access /fastpssm/ folder and call the pipeline as usual with: python fastPSSM.py --second-search jackhmmer --jackhmmer-threshold-type bit-score --input /examples/prova1.fa --output /examples/prova1/
+    then access /fastpssm/ folder and call the pipeline as usual with:
+       python fastPSSM.py --second-search jackhmmer \
+              --jackhmmer-threshold-type bit-score \
+	      --pfam-dir ../database_fastPSSM/pfam/ \
+	      --pfamscan-script ../database_fastPSSM/pfam_seq/PfamScan/pfam_scan.pl \
+	      --uniprot-db-fasta ../database_fastPSSM/blast/uniref90.fasta \
+	      --input /examples/prova1.fa \
+	      --output /examples/prova1/
+
+
+It is possible to keep a list of arguments in a file that has a file name starting with "@".
+The options should then be seperated by newlines.
+
+user@user:~$ cat args.txt
+--second-search
+jackhmmer
+--jackhmmer-threshold-type
+bit-score
+--pfam-dir
+../database_fastPSSM/pfam/
+--pfamscan-script
+../database_fastPSSM/pfam_seq/PfamScan/pfam_scan.pl
+--uniprot-db-fasta
+../database_fastPSSM/blast/uniref90.fasta
+user@user:~$ python fastPSSM.py @args.txt \
+	      --input /examples/prova1.fa \
+	      --output /examples/prova1/
+user@user:~$
 
 4b) or you can import an input folder from local machine with: docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm
-    then access /fastpssm/ and call the pipeline to the imported data: python fastPSSM.py --second-search jackhmmer --jackhmmer-threshold-type bit-score --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/
+    then access /fastpssm/ and call the pipeline to the imported data: python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/ @args.txt
