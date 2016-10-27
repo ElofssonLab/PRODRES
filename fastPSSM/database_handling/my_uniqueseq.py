@@ -25,6 +25,8 @@ OPTIONS:
   -md5 yes|no    Whether use md5 encoding, (default: yes)
                  When enabled, it may use fewer memory if -m = seq
   -h, --help     Print this help message and exit
+
+Created 2014-12-12, updated 2014-12-12, Nanjiang Shu
 """
 usage_exp="""\
 Examples:

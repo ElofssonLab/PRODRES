@@ -1,5 +1,12 @@
 #!/bin/env python
 
+# Description:
+#   A collection of classes and functions used by other programs
+#
+# Author: Nanjiang Shu (nanjiang.shu@scilifelab.se)
+#
+# Address: Science for Life Laboratory Stockholm, Box 1031, 17121 Solna, Sweden
+
 import sys
 import os
 import re
