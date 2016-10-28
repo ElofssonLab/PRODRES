@@ -91,7 +91,7 @@ def verify_writable_directory_path(path):
 
 def verify_program_available_in_path_directories(program_name):
     """Verify that the program name is available in the environment PATH directories."""
-    prog =  subprocess.check_output("which {}".format(program_name),shell=True)
+    prog =  subprocess.check_output(["which", program_name])
     #   shutils.which is woking only in python 3+, while db handling python code is written in 2.7
     if prog == None:
         raise RuntimeError('The program is not available in the enviroment PATH directories: {}'.format(path))
