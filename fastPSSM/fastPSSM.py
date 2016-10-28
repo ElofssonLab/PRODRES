@@ -103,7 +103,7 @@ def main(argv):
     args = parser.parse_args()
     # fix with parser mutually exclusive maybe?
     a = vars(args)
-    if a.has_key("jackhmmer_e_val"):
+    if a.get("jackhmmer_e_val",False):
         a["jackhmmer_bitscore"] = None
 
     verify_consistency_of_arguments(args)
