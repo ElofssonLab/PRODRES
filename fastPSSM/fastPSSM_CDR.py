@@ -70,8 +70,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
         pfamscan_cmd = [args.pfamscan_script] + pfamscan_args
 
         logging.info("\t\t\t> running pfamscan.pl: {}".format(" ".join(pfamscan_cmd)))
-        with open(pfam_output,"w") as outfile:
-            call(pfamscan_cmd,stdout=outfile)
+        with open(pfam_output, "w") as outfile:
+            call(pfamscan_cmd, stdout=outfile)
 
         #READ PFAMSCAN OUTPUT
         pfamList = []

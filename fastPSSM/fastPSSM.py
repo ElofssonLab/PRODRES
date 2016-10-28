@@ -113,7 +113,7 @@ def main(argv):
     subprocess.check_output(["psiblast", "-help"])
     subprocess.check_output(["python", "--version"])
     try:
-        subprocess.check_output([args.pfamscan_script,"-h"]) != None
+        subprocess.check_output([args.pfamscan_script, "-h"]) != None
     except subprocess.CalledProcessError as e:
         raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
 
