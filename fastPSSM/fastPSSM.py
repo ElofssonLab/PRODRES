@@ -115,7 +115,7 @@ def main(argv):
     try:
         subprocess.check_output([args.pfamscan_script,"-h"]) != None
     except subprocess.CalledProcessError as e:
-     sys.exit("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
+        raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
 
     if not os.path.exists(args.output):
         os.makedirs(args.output)
