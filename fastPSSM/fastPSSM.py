@@ -91,7 +91,7 @@ def verify_writable_directory_path(path):
 
 def verify_program_available_in_path_directories(program_name):
     """Verify that the program name is available in the environment PATH directories."""
-    prog =  subprocess.check_output("which {}".format(program_name),shell=True)
+    prog =  subprocess.check_output(["which",program_name])
     #   shutils.which is woking only in python 3+, while db handling python code is written in 2.7
     if prog == None:
         raise RuntimeError('The program is not available in the enviroment PATH directories: {}'.format(path))
@@ -101,6 +101,11 @@ def main(argv):
   try:
     parser = create_parser(argv)
     args = parser.parse_args()
+    # fix with parser mutually exclusive maybe?
+    a = vars(args)
+    if a.has_key("jackhmmer_e_val"):
+        a["jackhmmer_bitscore"] = None
+
     verify_consistency_of_arguments(args)
     verify_readable_file_path(args.uniprot_db_fasta)
     verify_readable_directory_path(args.pfam_dir)
@@ -113,9 +118,9 @@ def main(argv):
     subprocess.check_output(["psiblast", "-help"])
     subprocess.check_output(["python", "--version"])
     try:
-        subprocess.check_output([args.pfamscan_script,"-h"]) != None
+        subprocess.check_output([args.pfamscan_script, "-h"]) != None
     except subprocess.CalledProcessError as e:
-     sys.exit("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
+        raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
 
     if not os.path.exists(args.output):
         os.makedirs(args.output)

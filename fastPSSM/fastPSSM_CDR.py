@@ -65,13 +65,12 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
         pfamscan_args += ["-e_seq", args.pfamscan_e_val]
         pfamscan_args += ["-fasta", args.input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
-        #pfamscan_args += ["> ", pfam_output]
 
         pfamscan_cmd = [args.pfamscan_script] + pfamscan_args
 
         logging.info("\t\t\t> running pfamscan.pl: {}".format(" ".join(pfamscan_cmd)))
-        with open(pfam_output,"w") as outfile:
-            call(pfamscan_cmd,stdout=outfile)
+        with open(pfam_output, "w") as outfile:
+            call(pfamscan_cmd, stdout=outfile)
 
         #READ PFAMSCAN OUTPUT
         pfamList = []
