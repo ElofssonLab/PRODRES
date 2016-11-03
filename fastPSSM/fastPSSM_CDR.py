@@ -61,8 +61,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
         if args.pfamscan_clan_overlap == True:
             pfamscan_args += ["-clan_overlap"]
-
-        pfamscan_args += ["-e_seq", args.pfamscan_e_val]
+        if args.pfamscan_bitscore:
+            pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
+        else:
+            pfamscan_args += ["-e_seq", args.pfamscan_e_val]
         pfamscan_args += ["-fasta", args.input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
 
@@ -115,6 +117,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             else:
                 raise RuntimeError("Programming error. Unknown --jackhmmer-threshold-type value")
 
+            if args.jackhmmer_max:
+                jackhmmer_args += ["--max"]
             jackhmmer_args += ["--tblout", outfile]
             jackhmmer_args += ["-A", aligfile]
             jackhmmer_args += ["-Z", str(args.pfam_database_dimension)]
