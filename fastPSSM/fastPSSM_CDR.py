@@ -128,8 +128,18 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
             jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
             logging.info("\t\t\t> running jackhmmer search: {}".format(" ".join(jackhmmer_cmd)))
+            # JACKHMMER CALL
             call(jackhmmer_cmd)
-            os.system("cp " + hmmfile + "-3.hmm " + outputdir+"hmmOut.txt")
+            # JACKHMMER OUTPUT TEST
+            if os.path.exists(hmmfile + "-3.hmm"):
+                os.system("cp " + hmmfile + "-3.hmm " + outputdir+"hmmOut.txt")
+            # JACKHMMER SECOND FALLBACK FULL RUN
+            elif args.paramK and jackhmmer_args[-1] != args.uniprot_db_fasta:
+                logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
+                del(jackhmmer_args[-1])
+                jackhmmer_args += [args.uniprot_db_fasta]
+                jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
+                call(jackhmmer_cmd)
             print("\t\t>end")
 
         # PERFORMING PSIBLAST
