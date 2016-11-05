@@ -17,7 +17,6 @@ def create_parser(argv):
     parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
     parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer')
     parser.add_argument('--jackhmmer_bitscore', type=str, default="25.0", help='set the bitscore threshold for jackhmmer (jackhmmer option --incT)')
-    parser.add_argument('--jackhmmer_max', type=str, default=None, help='turn off hmmer pre-run filters (jackhmmer option --max)')
     parser.add_argument('--psiblast_iter', type=str, default="3", help='set the number of iterations for psiblast')
     parser.add_argument('--psiblast_e-val', type=str, default="0.1", help='set the e-value threshold for psiblast')
 
