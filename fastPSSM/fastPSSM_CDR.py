@@ -173,7 +173,17 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             psiblast_cmd_str = " ".join(psiblast_cmd)
             print("\t>performing>>"+ psiblast_cmd_str)
             logging.info("\t\t\t> running psiblast search: {}".format(psiblast_cmd_str))
+            # PSIBLAST CALL
             call(psiblast_cmd)
+            # PSIBLAST OUTPUT TEST
+            if "***** No hits found *****" in "".join(open(outfile).readlines()) and paramK:
+                logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
+                indb = psiblast_cmd.index("-db")
+                dbfile = args.uniprot_db_fasta
+                psiblast_cmd[indb+1] = dbfile+".blastdb"
+                if not os.path.exists(dbfile + ".blastdb.psq"):
+                    os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
+                call(psiblast_cmd)
             print("\t\t>end")
         else:
             raise RuntimeError("unknown option value of --second-search")
