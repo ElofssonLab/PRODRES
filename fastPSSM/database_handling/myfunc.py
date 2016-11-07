@@ -1,4 +1,11 @@
-#!/bin/env python
+#!/usr/bin/env python
+
+# Description:
+#   A collection of classes and functions used by other programs
+#
+# Author: Nanjiang Shu (nanjiang.shu@scilifelab.se)
+#
+# Address: Science for Life Laboratory Stockholm, Box 1031, 17121 Solna, Sweden
 
 import sys
 import os
@@ -6,6 +13,11 @@ import re
 import random
 import mydb_common
 import copy
+import subprocess
+import requests
+import gzip
+import time
+from datetime import datetime
 GAP = "-"
 BLOCK_SIZE = 100000 #set a good value for reading text file by block reading
 
@@ -57,7 +69,7 @@ def my_getopt_str(argv, i):#{{{
     except IndexError:
         msg = "Error! option '%s' must be followed by a string"
         print >> sys.stderr, msg%(argv[i])
-        raise
+        sys.exit(1)
 #}}}
 def my_getopt_int(argv, i):#{{{
     """
@@ -77,11 +89,11 @@ def my_getopt_int(argv, i):#{{{
         except (ValueError, TypeError):
             msg = "Error! option '%s' must be followed by an INT value"
             print >> sys.stderr, msg%(argv[i])
-            raise
+            sys.exit(1)
     except IndexError:
         msg = "Error! option '%s' must be followed by an INT value"
         print >> sys.stderr, msg%(argv[i])
-        raise
+        sys.exit(1)
 #}}}
 def my_getopt_float(argv, i):#{{{
     """
@@ -101,11 +113,11 @@ def my_getopt_float(argv, i):#{{{
         except (ValueError, TypeError):
             msg = "Error! option '%s' must be followed by an FLOAT value"
             print >> sys.stderr, msg%(argv[i])
-            raise
+            sys.exit(1)
     except IndexError:
         msg = "Error! option '%s' must be followed by an FLOAT value"
         print >> sys.stderr, msg%(argv[i])
-        raise
+        sys.exit(1)
 #}}}
 def my_dirname(filename):#{{{
     """
@@ -115,6 +127,12 @@ def my_dirname(filename):#{{{
     if d == "":
         d = "."
     return d
+#}}}
+def my_rootname(filename):#{{{
+    """
+    return the rootname of a given file
+    """
+    return  os.path.basename(os.path.splitext(filename)[0])
 #}}}
 def checkfile(f, name="input"):#{{{
     """
@@ -386,6 +404,8 @@ class ReadLineByBlock:#{{{
     def __del__(self):#{{{
         try:
             self.fpin.close()
+        except AttributeError:
+            pass
         except IOError:
             print >> sys.stderr, "Failed to close file %s"%(self.filename)
             return 1
@@ -591,6 +611,52 @@ def ReadIDList(infile, delim=None):#{{{
         print "Failed to read idlistfile %s"%infile
         return []
 #}}}
+def ReadIDList2(infile, col=0, delim=None):#{{{
+    """
+    Read in ID List of a file with lines, delimited by white space of each line
+    the col of ID is specified by col
+    """
+    hdl = ReadLineByBlock(infile)
+    if hdl.failure:
+        return []
+    lines = hdl.readlines()
+    li = []
+    while lines != None:
+        for line in lines:
+            if not line or line[0] == "#":
+                continue
+            strs = line.split(delim)
+            try:
+                li.append(strs[col].strip())
+            except:
+                pass
+        lines = hdl.readlines()
+    hdl.close()
+    return li
+#}}}
+def WriteFile(content, outfile, mode="w", isFlush=False):#{{{
+    try:
+        fpout = open(outfile, mode)
+        fpout.write(content)
+        if isFlush:
+            fpout.flush()
+        fpout.close()
+        return ""
+    except IOError:
+        return "Failed to write to %s with mode \"%s\""%(outfile, mode)
+#}}}
+def ReadFile(infile, mode="r"):#{{{
+    try:
+        fpin = open(infile, mode)
+        content = fpin.read()
+        fpin.close()
+        return content
+    except IOError:
+        print >> sys.stderr, "Failed to read file %s with mode '%s'"%(infile,
+                mode)
+        return ""
+#}}}
+
 def WriteIDList(idList, outfile):#{{{
     """
     Write a list of sequence IDs to outfile
@@ -846,6 +912,19 @@ def GetRLTYFromAnnotation(line):#{{{
 def GetClusterNoFromAnnotation(line):#{{{
     if line:
         m=re.search('ClusterNo *=[^, ]*',line)
+        if m: 
+            rlty = m.group(0).split('=')[1]
+            try:
+                return int(rlty)
+            except (ValueError, TypeError):
+                return None
+        else: 
+            return None
+    return None
+#}}}
+def GetNumSeqInClusterFromAnnotation(line):#{{{
+    if line:
+        m=re.search('numSeqInCluster *=[^, ]*',line)
         if m: 
             rlty = m.group(0).split('=')[1]
             try:
@@ -1333,17 +1412,27 @@ def ExtractFromSeqWithAnno(seqWithAnno, method_seqid=1, method_seq=0):#{{{
         1: extended fasta format, additional information may be added after
            sequence and enclosed by {}
     """
-    posAnnoEnd = seqWithAnno.find('\n')
-    anno = seqWithAnno[1:posAnnoEnd]
-    seqID = GetSeqIDFromAnnotation(anno, method_seqid)
+    seqID = None
+    anno = None
+    seq = None
+    if seqWithAnno and seqWithAnno[0] == '>':
+        posAnnoEnd = seqWithAnno.find('\n')
+        if posAnnoEnd >= 0:
+            anno = seqWithAnno[1:posAnnoEnd]
+            seqID = GetSeqIDFromAnnotation(anno, method_seqid)
 
-    seq = seqWithAnno[posAnnoEnd+1:]
-    seq = seq.replace('\n','').replace(' ','')
-    if method_seq == 1:
-        if seq.find('{') >= 0:
-            # re is much slower than find
-            seq = re.sub("{.*}", '',seq);  
+            seq = seqWithAnno[posAnnoEnd+1:]
+            seq = re.sub(r"\s+", '', seq)
+            if method_seq == 1:
+                if seq.find('{') >= 0:
+                    # re is much slower than find
+                    seq = re.sub("{.*}", '',seq);  
+        else:
+            anno = seqWithAnno[1:]
+            seqID = GetSeqIDFromAnnotation(anno, method_seqid)
+            seq = ""
     return (seqID, anno, seq)
+
 #}}}
 def ExtractFromSeqWithAnno_MPA(seqWithAnno, method_seqid=1, method_seq=0):#{{{
     """
@@ -1417,6 +1506,9 @@ def CountFastaSeq(inFile, BLOCK_SIZE=100000):#{{{
 #}}}
 def ReadFastaFromBuffer(buff,recordList, isEOFreached, #{{{
         method_seqid=1, method_seq=0):
+# fixed a bug in ReadFastaFromBuffer for plain text aa seq (without ">")
+# and also empty sequence record will be ignored
+# 2015-04-13
     """
     Return (unprocessedBuffer)
     method_seqid (default: 1):
@@ -1438,8 +1530,9 @@ def ReadFastaFromBuffer(buff,recordList, isEOFreached, #{{{
             end=buff.find("\n>",beg+1)
             if end >=0:
                 seqWithAnno=buff[beg:end]
-                recordList.append(ExtractFromSeqWithAnno(seqWithAnno,
-                    method_seqid, method_seq))
+                (seqid, seqanno, seq) =  ExtractFromSeqWithAnno(seqWithAnno, method_seqid, method_seq)
+                if not seq is None:
+                    recordList.append((seqid, seqanno, seq))
                 beg=end
             else:
                 unprocessedBuffer = buff[beg:]
@@ -1449,8 +1542,9 @@ def ReadFastaFromBuffer(buff,recordList, isEOFreached, #{{{
             break
     if isEOFreached and unprocessedBuffer:
         seqWithAnno = unprocessedBuffer
-        recordList.append(ExtractFromSeqWithAnno(seqWithAnno, method_seqid,
-            method_seq))
+        (seqid, seqanno, seq) =  ExtractFromSeqWithAnno(seqWithAnno, method_seqid, method_seq)
+        if not seq is None:
+            recordList.append((seqid, seqanno, seq))
         unprocessedBuffer = ""
     return unprocessedBuffer
 #}}}
@@ -1648,6 +1742,18 @@ def GetTMPosition(topo):#{{{
             break
     return posTM
 #}}}
+def GetSPPosition(topo):#{{{
+    """
+    Get position of Signal Peptide given a topology
+    2015-02-10
+    """
+    posSP=[]
+    b = topo.find('S')
+    if b != -1:
+        e=topo.rfind('S')+1
+        posSP.append((b,e))
+    return posSP
+#}}}
 def GetTMPosition_gapless(topo):#{{{
     """
     Get the position of TM helices given the topology (without gaps)
@@ -1753,4 +1859,371 @@ def PosTM2Topo(posTM, seqLength, NtermState):#{{{
             topList += [state] * (seqLength - posTM[len(posTM)-1][1])
     top = "".join(topList)
     return top
+#}}}
+
+def IsValidEmailAddress(email):#{{{
+    match = re.search(r'[\w.-]+@[\w.-]+.\w+', email)
+    if match:
+        return True
+    else:
+        return False
+#}}}
+
+
+def date_diff(older, newer):#{{{
+    """
+    Returns a humanized string representing time difference
+
+    The output rounds up to days, hours, minutes, or seconds.
+    4 days 5 hours returns '4 days'
+    0 days 4 hours 3 minutes returns '4 hours', etc...
+    """
+
+    timeDiff = newer - older
+    days = timeDiff.days
+    hours = timeDiff.seconds/3600
+    minutes = timeDiff.seconds%3600/60
+    seconds = timeDiff.seconds%3600%60
+
+    str = ""
+    tStr = ""
+    if days > 0:
+        if days == 1:   tStr = "day"
+        else:           tStr = "days"
+        str = str + "%s %s" %(days, tStr)
+        return str
+    elif hours > 0:
+        if hours == 1:  tStr = "hour"
+        else:           tStr = "hours"
+        str = str + "%s %s" %(hours, tStr)
+        return str
+    elif minutes > 0:
+        if minutes == 1:tStr = "min"
+        else:           tStr = "mins"
+        str = str + "%s %s" %(minutes, tStr)
+        return str
+    elif seconds >= 0:
+        if seconds <= 1:tStr = "sec"
+        else:           tStr = "secs"
+        str = str + "%s %s" %(seconds, tStr)
+        return str
+    else:
+        return None
+#}}}
+def second_to_human(time_in_sec):#{{{
+    """
+    Returns a humanized string given the time in seconds
+
+    The output rounds up to days, hours, minutes, or seconds.
+    4 days 5 hours returns '4 days 5 hours'
+    0 days 4 hours 3 minutes returns '4 hours 3 mins', etc...
+    """
+
+    days = int(time_in_sec)/3600/24
+    hours = int(time_in_sec - 3600*24*days)/3600
+    minutes = int(time_in_sec - 3600*24*days - 3600*hours)%3600/60
+    seconds = time_in_sec%3600%60
+
+    ss = ""
+    tStr = ""
+    if days > 0:
+        if days == 1:   tStr = "day"
+        else:           tStr = "days"
+        ss += " %s %s" %(days, tStr)
+    if hours > 0:
+        if hours == 1:  tStr = "hour"
+        else:           tStr = "hours"
+        ss += " %s %s" %(hours, tStr)
+    if minutes > 0:
+        if minutes == 1:tStr = "min"
+        else:           tStr = "mins"
+        ss += " %s %s" %(minutes, tStr)
+    if seconds > 0 or (seconds == 0 and days == 0 and hours == 0 and minutes == 0):
+        if seconds <= 1:tStr = "sec"
+        else:           tStr = "secs"
+        ss += " %g %s" %(seconds, tStr)
+
+    ss = ss.strip()
+    if ss != "":
+        return ss
+    else:
+        return None
+#}}}
+
+def check_output(*popenargs, **kwargs):#{{{
+    r"""Run command with arguments and return its output as a byte string.
+    Backported from Python 2.7 as it's implemented as pure python on stdlib.
+    >>> check_output(['/usr/bin/python', '--version'])
+    Python 2.6.2
+    """
+    process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
+    output, unused_err = process.communicate()
+    retcode = process.poll()
+    if retcode:
+        cmd = kwargs.get("args")
+        if cmd is None:
+            cmd = popenargs[0]
+        error = subprocess.CalledProcessError(retcode, cmd)
+        error.output = output
+        raise error
+    return output
+#}}}
+
+def IsURLExist(url):#{{{
+    try:
+        response = requests.get(url)
+        if response.status_code < 400:
+            return True
+        else:
+            return False
+    except:
+        return False
+#}}}
+def Size_human2byte(s):#{{{
+    if s.isdigit():
+        return int(s)
+    else:
+        s = s.upper()
+        match = re.match(r"([0-9]+)([A-Z]+)", s , re.I)
+        if match:
+            items = match.groups()
+            size = int(items[0])
+            if items[1] in ["B"]:
+                return size
+            elif items[1] in ["K", "KB"]:
+                return size*1024
+            elif items[1] in ["M", "MB"]:
+                return size*1024*1024
+            elif items[1] in ["G", "GB"]:
+                return size*1024*1024*1024
+            else:
+                print >> sys.stderr, "Bad maxsize argument:",s
+                return -1
+        else:
+            print >> sys.stderr, "Bad maxsize argument:",s
+            return -1
+
+#}}}
+def ArchiveFile(filename, maxsize):#{{{
+    """
+    Archive the logfile if its size exceeds the limit
+    """
+    if not os.path.exists(filename):
+        print >> sys.stderr, filename,  "does not exist. ignore."
+        return 1
+    else:
+        filesize = os.path.getsize(filename)
+        if filesize > maxsize:
+            cnt = 0
+            zipfile = ""
+            while 1:
+                cnt += 1
+                zipfile = "%s.%d.gz"%(filename, cnt)
+                if not os.path.exists(zipfile):
+                    break
+            # write zip file
+            try:
+                f_in = open(filename, 'rb')
+            except IOError:
+                print >> sys.stderr, "Failed to read %s"%(filename)
+                return 1
+            try:
+                f_out = gzip.open(zipfile, 'wb')
+            except IOError:
+                print >> sys.stderr, "Failed to write to %s"%(zipfile)
+                return 1
+
+            f_out.writelines(f_in)
+            f_out.close()
+            f_in.close()
+            print "%s is archived to %s"%(filename, zipfile)
+            os.remove(filename)
+        return 0
+#}}}
+def GetSuqPriority(numseq_this_user):#{{{
+    prio = int(( (1/time.time()*1e10) * 1e8 ) ) - int(numseq_this_user**1.5)
+    return prio
+#}}}
+def WriteTOPCONSTextResultFile(outfile, outpath_result, maplist,#{{{
+        runtime_in_sec, base_www_url, statfile=""):
+    try:
+        methodlist = ['TOPCONS', 'OCTOPUS', 'Philius', 'PolyPhobius', 'SCAMPI', 'SPOCTOPUS']
+        fpout = open(outfile, "w")
+
+        fpstat = None
+        num_TMPro_cons = 0
+        num_TMPro_any = 0
+        num_nonTMPro_cons = 0
+        num_nonTMPro_any = 0
+        num_SPPro_cons = 0
+        num_SPPro_any = 0
+
+        if statfile != "":
+            fpstat = open(statfile, "w")
+
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print >> fpout, "##############################################################################"
+        print >> fpout, "TOPCONS2 result file"
+        print >> fpout, "Generated from %s at %s"%(base_www_url, date)
+        print >> fpout, "Total request time: %.1f seconds."%(runtime_in_sec)
+        print >> fpout, "##############################################################################"
+        cnt = 0
+        for line in maplist:
+            strs = line.split('\t')
+            subfoldername = strs[0]
+            length = int(strs[1])
+            desp = strs[2]
+            seq = strs[3]
+            print >> fpout, "Sequence number: %d"%(cnt+1)
+            print >> fpout, "Sequence name: %s"%(desp)
+            print >> fpout, "Sequence length: %d aa."%(length)
+            print >> fpout, "Sequence:\n%s\n\n"%(seq)
+
+            is_TM_cons = False
+            is_TM_any = False
+            is_nonTM_cons = True
+            is_nonTM_any = True
+            is_SP_cons = False
+            is_SP_any = False
+
+            for i in xrange(len(methodlist)):
+                method = methodlist[i]
+                if method == "TOPCONS":
+                    topfile = "%s/%s/%s/topcons.top"%(outpath_result, subfoldername, "Topcons")
+                elif method == "Philius":
+                    topfile = "%s/%s/%s/query.top"%(outpath_result, subfoldername, "philius")
+                elif method == "SCAMPI":
+                    topfile = "%s/%s/%s/query.top"%(outpath_result, subfoldername, method+"_MSA")
+                else:
+                    topfile = "%s/%s/%s/query.top"%(outpath_result, subfoldername, method)
+                if os.path.exists(topfile):
+                    top = ReadFile(topfile)
+                else:
+                    top = ""
+                if top == "":
+                    #top = "***No topology could be produced with this method topfile=%s***"%(topfile)
+                    top = "***No topology could be produced with this method***"
+
+                if fpstat != None:
+                    if top.find('M') >= 0:
+                        is_TM_any = True
+                        is_nonTM_any = False
+                        if method == "TOPCONS":
+                            is_TM_cons = True
+                            is_nonTM_cons = False
+                    if top.find('S') >= 0:
+                        is_SP_any = True
+                        if method == "TOPCONS":
+                            is_SP_cons = True
+                print >> fpout, "%s predicted topology:\n%s\n\n"%(method, top)
+
+
+            if fpstat:
+                num_TMPro_cons += is_TM_cons
+                num_TMPro_any += is_TM_any
+                num_nonTMPro_cons += is_nonTM_cons
+                num_nonTMPro_any += is_nonTM_any
+                num_SPPro_cons += is_SP_cons
+                num_SPPro_any += is_SP_any
+
+            dgfile = "%s/%s/dg.txt"%(outpath_result, subfoldername)
+            dg_content = ReadFile(dgfile)
+            lines = dg_content.split("\n")
+            dglines = []
+            for line in lines:
+                if line and line[0].isdigit():
+                    dglines.append(line)
+            if len(dglines)>0:
+                print >> fpout,  "\nPredicted Delta-G-values (kcal/mol) "\
+                        "(left column=sequence position; right column=Delta-G)\n"
+                print >> fpout, "\n".join(dglines)
+
+            reliability_file = "%s/%s/Topcons/reliability.txt"%(outpath_result, subfoldername)
+            reliability = ReadFile(reliability_file)
+            if reliability != "":
+                print >> fpout, "\nPredicted TOPCONS reliability (left "\
+                        "column=sequence position; right column=reliability)\n"
+                print >> fpout, reliability
+            print >> fpout, "##############################################################################"
+            cnt += 1
+
+        if fpstat:
+            out_str_list = []
+            out_str_list.append("num_TMPro_cons %d"% num_TMPro_cons)
+            out_str_list.append("num_TMPro_any %d"% num_TMPro_any)
+            out_str_list.append("num_nonTMPro_cons %d"% num_nonTMPro_cons)
+            out_str_list.append("num_nonTMPro_any %d"% num_nonTMPro_any)
+            out_str_list.append("num_SPPro_cons %d"% num_SPPro_cons)
+            out_str_list.append("num_SPPro_any %d"% num_SPPro_any)
+            fpstat.write("%s"%("\n".join(out_str_list)))
+
+            fpstat.close()
+
+    except IOError:
+        print "Failed to write to file %s"%(outfile)
+#}}}
+def Sendmail(from_email, to_email, subject, bodytext):#{{{
+    sendmail_location = "/usr/sbin/sendmail" # sendmail location
+    p = os.popen("%s -t" % sendmail_location, "w")
+    p.write("From: %s\n" % from_email)
+    p.write("To: %s\n" % to_email)
+    p.write("Subject: %s\n"%(subject))
+    p.write("\n") # blank line separating headers from body
+    p.write(bodytext)
+    status = p.close()
+    if status == None or status == 0 :
+        print "Sendmail to %s succeeded"%(to_email)
+        return 0
+    else:
+        print "Sendmail to %s failed with status"%(to_email), status
+        return status
+
+#}}}
+def ReadFinishedJobLog(infile, status=""):#{{{
+    dt = {}
+    if not os.path.exists(infile):
+        return dt
+
+    hdl = ReadLineByBlock(infile)
+    if not hdl.failure:
+        lines = hdl.readlines()
+        while lines != None:
+            for line in lines:
+                if not line or line[0] == "#":
+                    continue
+                strs = line.split("\t")
+                if len(strs)>= 10:
+                    jobid = strs[0]
+                    status_this_job = strs[1]
+                    if status == "" or status == status_this_job:
+                        jobname = strs[2]
+                        ip = strs[3]
+                        email = strs[4]
+                        numseq_str = strs[5]
+                        method_submission = strs[6]
+                        submit_date_str = strs[7]
+                        start_date_str = strs[8]
+                        finish_date_str = strs[9]
+                        dt[jobid] = [status_this_job, jobname, ip, email,
+                                numseq_str, method_submission, submit_date_str,
+                                start_date_str, finish_date_str]
+            lines = hdl.readlines()
+        hdl.close()
+
+    return dt
+#}}}
+
+def disk_usage(path):#{{{
+    """Return disk usage statistics about the given path.
+    (total, used, free) in bytes
+    """
+    try:
+        st = os.statvfs(path)
+        free = st.f_bavail * st.f_frsize
+        total = st.f_blocks * st.f_frsize
+        used = (st.f_blocks - st.f_bfree) * st.f_frsize
+        return (total, used, free)
+    except OSError:
+        print sys.stderr, "os.statvfs(%s) failed"%(path)
+        return (-1,-1,-1)
 #}}}
