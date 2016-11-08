@@ -176,7 +176,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # PSIBLAST CALL
             call(psiblast_cmd)
             # PSIBLAST OUTPUT TEST
-            if "***** No hits found *****" in "".join(open(outfile).readlines()) and paramK:
+            if "***** No hits found *****" in "".join(open(outfile).readlines()) and args.paramK:
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
                 indb = psiblast_cmd.index("-db")
                 dbfile = args.uniprot_db_fasta
