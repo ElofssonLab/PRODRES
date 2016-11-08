@@ -120,10 +120,12 @@ def main(argv):
     subprocess.check_output(["jackhmmer", "-h"])
     subprocess.check_output(["psiblast", "-help"])
     subprocess.check_output(["python", "--version"])
-    try:
-        subprocess.check_output([args.pfamscan_script, "-h"]) != None
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
+    # PFAMSCAN TEST MODIFIED TO FILE EXISTANCE
+    #try:
+    #    subprocess.Popen(["sh","-c",args.pfamscan_script,"-h",">/dev/null"])
+    #except subprocess.CalledProcessError as e:
+    #    raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
+    verify_readable_file_path(args.pfamscan_script)
 
     if not os.path.exists(args.output):
         os.makedirs(args.output)
