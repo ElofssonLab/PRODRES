@@ -15,9 +15,9 @@ import gzip
 #import cProfile
 
 BLOCK_SIZE = 100000
-MIN_FREE_DISK_SPACE_IN_GB = 100
+MIN_FREE_DISK_SPACE_IN_GB = 160
 url_pfam_uniprot_alnfile = "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.uniprot.gz"
-url_seqdb = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_trembl.fasta.gz"
+url_seqdb = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/previous_releases/"
 
 
 # Description:
@@ -36,7 +36,7 @@ Usage: %s [OPTIONS] -outpath DIR -cdhit PATH
 
 Description:
     build the database with full-length sequences for Pfam families
-    Note that you will need at least 300 GB of free storage to build the database,
+    Note that you will need at least %d GB of free storage to build the database,
     if alnfile and seqdb are not supplied
 
     The tablenames for all databases are \"db\"
@@ -51,7 +51,8 @@ OPTIONS:
   -seqdbname DBNAME  Set the database name for full-length sequences, if not supplied, 
                      the program will download it from 
                      %s
-  -storage   DIR     Path to large storage (with 300 GB free space) 
+                     and build it with both uniprot_trembl and uniprot_sprot databases
+  -storage   DIR     Path to large storage (with %d GB free space) 
                      if alnfile and seqdb are not supplied
   -cutoff    INT     Sequence identity cutoff (percentages) within the family, (default: 90)
                      cd-hit is used to reduce the sequence redundancy
@@ -63,8 +64,9 @@ OPTIONS:
 Created 2016-07-07, updated 2016-11-08, Nanjiang Shu
 
 Examples:
+
     %s -outpath /data/pfamfullseqdb -cdhit ~/bin/cd-hit
-"""%(progname, url_pfam_uniprot_alnfile, url_seqdb, progname)
+"""%(progname, MIN_FREE_DISK_SPACE_IN_GB, url_pfam_uniprot_alnfile, url_seqdb, MIN_FREE_DISK_SPACE_IN_GB, progname)
 
 def PrintHelp():
     print usage
@@ -336,7 +338,7 @@ def CreateSeqDB_sqlite(uniprot_trembl_datfile, uniprot_sprot_datfile, isQuiet=Fa
         myfunc.myclose(fpout_aclist)
         numseq = cntseq
 
-        cmd =  "INSERT OR IGNORE INTO %s(Numseq,  AC_longest, Length_longest, AC_shortest, Length_shortest) VALUES('%s', '%s',  '%d', '%s', '%d')"%(tablename_stat, numseq, seq_longest['aclist'].replace("'","''"), seq_longest['length'], seq_shortest['ac'].replace("'","''"), seq_shortest['length'])
+        cmd =  "INSERT OR IGNORE INTO %s(Numseq,  AC_longest, Length_longest, AC_shortest, Length_shortest) VALUES('%s', '%s',  '%d', '%s', '%d')"%(tablename_stat, numseq, seq_longest['ac'].replace("'","''"), seq_longest['length'], seq_shortest['ac'].replace("'","''"), seq_shortest['length'])
         cur.execute(cmd)
 
 
