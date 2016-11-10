@@ -588,7 +588,7 @@ def CreatePfamFullseqDB(alnfile, seqidt_cutoff, seqdbname, seqtablename, outdb):
         numFam = cntFam
 
         cmd =  "INSERT OR IGNORE INTO %s(Numfam,  Pfamid_biggest, Numseq_biggest, Pfamid_smallest, Numseq_smallest) VALUES('%s', '%s',  '%d', '%s', '%d')"%(pfamdb_tablename_stat, numFam, fam_biggest['pfamid'].replace("'","''"), fam_biggest['numseq'], fam_smallest['pfamid'].replace("'","''"), fam_smallest['numseq'])
-        cur.execute(cmd)
+        cur_pfamdb.execute(cmd)
 
     if not g_params['debug']:
         try:
