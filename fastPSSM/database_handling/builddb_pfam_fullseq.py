@@ -12,6 +12,7 @@ import time
 #import yaml
 import sqlite3
 import gzip
+import json
 #import cProfile
 
 BLOCK_SIZE = 100000
@@ -552,12 +553,18 @@ def CreatePfamFullseqDB(alnfile, seqidt_cutoff, seqdbname, seqtablename, outdb):
                     print >> sys.stderr, e
                     print "cmdline: %s"%(cmdline)
                 if is_run_cdhit_success and os.path.exists(out_nrfullseqfile):
+                    numseq_nr = myfunc.CountFastaSeq(out_nrfullseqfile)
                     if g_params['verbose']:
-                        numseq_nr = myfunc.CountFastaSeq(out_nrfullseqfile)
                         print "%d: family %s | numseq = %d | num_uniq_id = %d | num_missing_id = %d | num_get_seq = %d | num_nr_seq = %d" %(cntFam, rd['ac'], rd['numseq'], len(rd['seqidset']), len(missing_seqidset), numseq_retrieved, numseq_nr)
                         print "Family %s, missing idlist: %s " %(rd['ac'], " ".join(list(missing_seqidset)))
 
-                    seqcontent = myfunc.ReadFile(out_nrfullseqfile)
+                    #seqcontent = myfunc.ReadFile(out_nrfullseqfile)
+                    (seqidlist, annolist, seqlist) = myfunc.ReadFasta(out_nrfullseqfile)
+                    seqdict = {}
+                    for ii in xrange(len(seqidlist)):
+                        seqdict[seqidlist[ii]] = (annolist[ii], seqlist[ii])
+                    seqcontent = json.dumps(seqdict)
+
                     cmd =  "INSERT OR IGNORE INTO %s(AC,  Desp, Numseq_aln, Numseq_uniqid, Numseq_get, Numseq_nr, Seq) VALUES('%s', '%s',  %d, %d, %d, %d, '%s') "%(pfamdb_tablename, rd['ac'], rd['def'].replace("'","''"), rd['numseq'], len(rd['seqidset']), numseq_retrieved, numseq_nr, seqcontent.replace("'","''"))
                     #print cmd
                     #print cur_pfamdb
@@ -768,8 +775,8 @@ def main(g_params):#{{{
             return 1
         outpath = os.path.realpath(outpath)
 
-    outdb = "%s%spfamfullseqdb.nr%d.sqlite3"%(outpath, os.sep, seqidt_cutoff)
-    versionfile = "%s%spfamfullseqdb.nr%d.version.txt"%(outpath, os.sep, seqidt_cutoff)
+    outdb = "%s%s%s.nr%d.sqlite3"%(outpath, os.sep, g_params['dbname'], seqidt_cutoff)
+    versionfile = "%s%s%s.nr%d.version.txt"%(outpath, os.sep, g_params['dbname'], seqidt_cutoff)
 
     if pfam_version != "" or uniprot_version != "":
         txt = "Pfam_version: %s\nUniprot_version: %s\n"%(pfam_version, uniprot_version)
@@ -800,6 +807,7 @@ def InitGlobalParameter():#{{{
     g_params['verbose'] = False
     g_params['nooverwrite'] = False
     g_params['exec_cdhit'] = ""
+    g_params['dbname'] = "prodres_db"
     g_params['debug'] = False
     return g_params
 #}}}
