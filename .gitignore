@@ -1,4 +1,5 @@
 *.pyc
-/fastPSSM/logs/
-/fastPSSM_DOCKER/src/
-/fastPSSM_DOCKER/test/
+./PRODRES/*.pyc
+./PRODRES/logs/
+./PRODRES_DOCKER/src/
+./PRODRES_DOCKER/test/
