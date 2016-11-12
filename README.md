@@ -1,14 +1,14 @@
-# fastPSSM : fast generation of Position-Specific Scoring Matrices
+# PRODRES : PROtein Domain REduced Search
 
-- Download (or clone) the FastPSSM Git repository
-- Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the FastPSSM folder 
+- Download (or clone) the PRODRES Git repository
+- Dowload and unzip the database from http://topcons.net/static/download/topcons2_database.zip inside the PRODRES folder 
 - There are three paths in fastPSSM_environment.py that need to be adjusted **ONLY** in case you do not use the database as-is, otherwise leave them as they are:
   - **pfam**: /pfam/to/the/pfam/folder/
   - **pfamscan**: /path/to/pfam_scan.pl
   - **uniprot_db**: /path/to/fall-back/database [e.g. Uniref90]
 
 - Running the workflow:
-  - Basic usage: `python fastPSSM.py [parameters]`
+  - Basic usage: `python PRODRES.py [parameters]`
 
             parameters:
                 --input <input file>:                   needs to be in fasta format, can be one or more sequences [**]
@@ -25,12 +25,12 @@
             [**] = compulsory parameter
 
 - example call for 1 sequence using PSI-BLAST to create the PSSM:       
-`python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`
+`python PRODRES.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`
 
 - example call for multiple sequences using JACKHMMER to create the PSSM:        
-`python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`
+`python PRODRES.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`
 
-# fastPSSM Docker portable version 
+# PRODRES Docker portable version 
 
 in order to install: 
 
@@ -41,15 +41,15 @@ in order to install:
 
 3. wait for the required databases to be downloaded
 
-4. Access the virtual machine with a ready-to-execute fastpssm pipeline using:              
-  - `docker run -t -i fastpssm`
-  - then access fastpssm/ folder and call the pipeline     
+4. Access the virtual machine with a ready-to-execute prodres pipeline using:              
+  - `docker run -t -i prodres`
+  - then access prodres/ folder and call the pipeline     
   - example call for 1 sequence using PSI-BLAST to create the PSSM:    
-  `python fastPSSM.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`    
+  `python PRODRES.py --input test/single_seq.fa --output test/rst_1_seq/ --psiblast`    
   - example call for multiple sequences using JACKHMMER to create the PSSM:    
-  `python fastPSSM.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`    
+  `python PRODRES.py --input test/multiple_seq.fa --output test/rst_many_seqs/ --jackhmmer`    
 
 5. Alternatively, import an input folder from local machine with:     
-  `docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm`     
-  then access fastpssm/ folder and call the pipeline to the imported data:      
-  `python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/`    
+  `docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ prodres`     
+  then access prodres/ folder and call the pipeline to the imported data:      
+  `python PRODRES.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/`    
