@@ -2,10 +2,9 @@ import os
 import re
 from subprocess import call
 import sys
-sys.path.append("./database_handling/")
-import myfunc
 import logging
-
+import json
+import sqlite3
 
 def COMMON_DOMAINS_REDUCTION(args, inp):
 
@@ -86,12 +85,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                     pos = line.find("PF")
                     if pos != -1:
                         pfamList.append(line[pos:pos + 7])
-        pfam_seq_db = args.pfam_dir +"/pfamfull/uniref100.pfam27.pfamseq.nr90"
+        pfam_seq_db = args.pfam_dir +"/prodres_db.nr90.sqlite3"
 
         # handling the Pfam DB
         createHitDB(list(set(pfamList)), tempdir, pfam_seq_db)
-
-        os.system("rm " + tempdir + "QUERY.hits.db.temp")  # remove this if you want to check temp db, but I remember I did already back in the time when I was young
 
         #  PERFORMING JACKHMMER
         if args.second_search == "jackhmmer":
@@ -190,14 +187,26 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
 def createHitDB(pfamList, work_dir,pfamseqdb):
     logging.info("\t\t\t> constructing CDR database")
-    hdl = myfunc.MyDB(pfamseqdb)
-    if hdl.failure:
-        return 1
-    with open(work_dir + "QUERY.hits.db.temp", "w") as outFile:
-        for pfamid in pfamList:
-            record = hdl.GetRecord(pfamid)
-            if record:
-                outFile.write(record)
-        hdl.close()
+    try:
+        prodres_db = pfamseqdb
+        pfamidlist = pfamList
+    except IndexError:
+        print "usage: %s prodresdb pfamid [pfamid ...] "%(sys.argv[0])
+        sys.exit(1)
 
-    os.system("python database_handling/my_uniqueseq.py " + work_dir + "QUERY.hits.db.temp")
+    with open(work_dir + "QUERY.hits.db", "w") as fpout:
+        tablename = "db"
+        con = sqlite3.connect(prodres_db)
+        with con:
+            cur = con.cursor()
+            seqidset = set([])
+            for pfamid in pfamidlist:
+                cmd = "SELECT Seq FROM %s WHERE AC = \"%s\""%(tablename, pfamid)
+                cur.execute(cmd)
+                rows = cur.fetchall()
+                for row in rows:
+                    seqdict = json.loads(row[0])
+                    for seqid in seqdict:
+                        if not seqid in seqidset:
+                            seqidset.add(seqid)
+                            fpout.write(">%s\n%s\n"%(seqdict[seqid][0],seqdict[seqid][1]))
