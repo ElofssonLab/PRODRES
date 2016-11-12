@@ -12,3 +12,8 @@
 bak/
 # tmp folder
 tmp/
+
+./PRODRES/*.pyc
+./PRODRES/logs/
+./PRODRES_DOCKER/src/
+./PRODRES_DOCKER/test/
