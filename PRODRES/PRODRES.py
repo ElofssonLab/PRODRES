@@ -152,7 +152,7 @@ def main(argv):
     if not os.path.exists("logs"):
         os.mkdir("logs")
     logging.basicConfig(filename='logs/{}run.log'.format(datetime.datetime.today()), level=log_level, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
-    logging.warning('Started FASTPSSM pipeline with the following args:\n{}'.format(" ".join(argv)))
+    logging.warning('Started PRODRES pipeline with the following args:\n{}'.format(" ".join(argv)))
 
     logging.info('\t> Environment testing...')
     print("Beginning Environment testing...")
