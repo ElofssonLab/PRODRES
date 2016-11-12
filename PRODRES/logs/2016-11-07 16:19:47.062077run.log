@@ -1,0 +1,11 @@
+11/07/2016 04:19:47 PM Started FASTPSSM pipeline with the following args:
+fastPSSM.py --input ../../ktest/ktest2/query.fa --output ../../ktest/ktest2_3 --second-search psiblast --pfam-dir /home/stefano/sweDATA/glob/pfam/ --pfamscan-script /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl --uniprot-db-fasta /home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta --pfamscan_bitscore 2
+11/07/2016 04:19:47 PM 	> Environment testing...
+11/07/2016 04:19:47 PM 	> End.
+11/07/2016 04:19:47 PM 	> CDR...
+11/07/2016 04:19:47 PM 		> WORKING ON: Q9P3W6
+11/07/2016 04:19:47 PM 			> running pfamscan.pl: /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl -clan_overlap -b_seq 2 -fasta ../../ktest/ktest2/query.fa -dir /home/stefano/sweDATA/glob/pfam/
+11/07/2016 04:19:58 PM 			> constructing CDR database
+11/07/2016 04:20:33 PM 			> running psiblast search: psiblast -num_iterations 3 -out ../../ktest/ktest2_3/Q9P3W6/outputs//psiOutput.txt -evalue 0.1 -dbsize 28332677 -out_ascii_pssm ../../ktest/ktest2_3/Q9P3W6/outputs//psiPSSM.txt -query ../../ktest/ktest2_3/Q9P3W6/temp//query.fa -db ../../ktest/ktest2_3/Q9P3W6/temp//QUERY.hits.db.blastdb
+11/07/2016 04:20:54 PM 	> End.
+11/07/2016 04:20:54 PM Pipeline ended

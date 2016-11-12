@@ -1,0 +1,11 @@
+10/27/2016 07:41:03 PM Started FASTPSSM pipeline with the following args:
+fastPSSM.py --input test/single_seq.fa --output ../prova1 --second-search jackhmmer --pfam-dir /home/stefano/sweDATA/glob/pfam/ --pfamscan-script /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl --uniprot-db-fasta /home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta --jackhmmer-threshold-type bit-score
+10/27/2016 07:41:03 PM 	> Environment testing...
+10/27/2016 07:41:03 PM 	> End.
+10/27/2016 07:41:03 PM 	> CDR...
+10/27/2016 07:41:03 PM 		> WORKING ON: O93740
+10/27/2016 07:41:03 PM 			> running pfamscan.pl: /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl -clan_overlap -e_seq 10.0 -fasta test/single_seq.fa -dir /home/stefano/sweDATA/glob/pfam/
+10/27/2016 07:41:04 PM 			> constructing CDR database
+10/27/2016 07:41:04 PM 			> running jackhmmer search: jackhmmer -N 3 -o ../prova1/O93740/outputs//fullOut.txt --incT 25.0 --tblout ../prova1/O93740/outputs//tableOut.txt -A ../prova1/O93740/outputs//Alignment.txt -Z 28332677 --chkhmm ../prova1/O93740/temp/hmmOut ../prova1/O93740/temp//query.fa ../prova1/O93740/temp//QUERY.hits.db
+10/27/2016 07:41:08 PM 	> End.
+10/27/2016 07:41:08 PM Pipeline ended

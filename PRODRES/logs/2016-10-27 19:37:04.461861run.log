@@ -1,0 +1,11 @@
+10/27/2016 07:37:04 PM Started FASTPSSM pipeline with the following args:
+fastPSSM.py --input test/single_seq.fa --output ../prova1 --second-search psiblast --pfam-dir /home/stefano/sweDATA/glob/pfam/ --pfamscan-script /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl --uniprot-db-fasta /home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta
+10/27/2016 07:37:04 PM 	> Environment testing...
+10/27/2016 07:37:04 PM 	> End.
+10/27/2016 07:37:04 PM 	> CDR...
+10/27/2016 07:37:04 PM 		> WORKING ON: O93740
+10/27/2016 07:37:04 PM 			> running pfamscan.pl: /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl -clan_overlap -e_seq 10.0 -fasta test/single_seq.fa -dir /home/stefano/sweDATA/glob/pfam/
+10/27/2016 07:37:05 PM 			> constructing CDR database
+10/27/2016 07:37:06 PM 			> running psiblast search: psiblast -num_iterations 3 -out ../prova1/O93740/outputs//psiOutput.txt -evalue 0.1 -dbsize 28332677 -out_ascii_pssm ../prova1/O93740/outputs//psiPSSM.txt -query ../prova1/O93740/temp//query.fa -db ../prova1/O93740/temp//QUERY.hits.db.blastdb
+10/27/2016 07:37:11 PM 	> End.
+10/27/2016 07:37:11 PM Pipeline ended

@@ -1,0 +1,11 @@
+11/02/2016 05:18:34 PM Started FASTPSSM pipeline with the following args:
+fastPSSM.py --input ../../ktest/kfile2 --output ../../ktest/ktest1_1 --second-search jackhmmer --pfam-dir /home/stefano/sweDATA/glob/pfam/ --pfamscan-script /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl --uniprot-db-fasta /home/stefano/sweDATA/glob/uniprot/uniprot_trembl.fasta --jackhmmer-threshold-type e-value --jackhmmer_e-val 10 --pfamscan_e-val 100
+11/02/2016 05:18:34 PM 	> Environment testing...
+11/02/2016 05:18:34 PM 	> End.
+11/02/2016 05:18:34 PM 	> CDR...
+11/02/2016 05:18:34 PM 		> WORKING ON: H4EXT_A
+11/02/2016 05:18:34 PM 			> running pfamscan.pl: /home/stefano/sweDATA/glob/Pfamscan/pfam_scan.pl -clan_overlap -e_seq 100 -fasta ../../ktest/kfile2 -dir /home/stefano/sweDATA/glob/pfam/
+11/02/2016 05:18:41 PM 			> constructing CDR database
+11/02/2016 05:18:43 PM 			> running jackhmmer search: jackhmmer -N 3 -o ../../ktest/ktest1_1/H4EXT_A/outputs//fullOut.txt --incE 10 --max --tblout ../../ktest/ktest1_1/H4EXT_A/outputs//tableOut.txt -A ../../ktest/ktest1_1/H4EXT_A/outputs//Alignment.txt -Z 28332677 --chkhmm ../../ktest/ktest1_1/H4EXT_A/temp/hmmOut ../../ktest/ktest1_1/H4EXT_A/temp//query.fa ../../ktest/ktest1_1/H4EXT_A/temp//QUERY.hits.db
+11/02/2016 05:19:20 PM 	> End.
+11/02/2016 05:19:20 PM Pipeline ended
