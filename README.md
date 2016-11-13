@@ -5,7 +5,7 @@
   - Pfam-A.hmm.dat.gz (ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.dat.gz)
   - Pfam-A.hmm.gz (ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz)
 - Download and unzip PfamScan.pl tool from ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/PfamScan.tar.gz
-- Dowload the database from http://topcons.net/static/download/prodres_db/30.0/prodres_db.nr90.sqlite3 inside the PRODRES folder 
+- Download the database from http://topcons.net/static/download/prodres_db/30.0/prodres_db.nr90.sqlite3 inside the PRODRES folder 
 - Download a fall-back database, e.g. Uniref90 (from ftp://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz)
 - Download current PSI-BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
 - Download hmmer software (from http://hmmer.org/download.html)
@@ -13,7 +13,7 @@
 - Create a folder, e.g. pfam/ and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
 - Running the workflow:
   - Basic usage: `python PRODRES.py [parameters]`
-                  -h show help 
+                  *-h show help 
                   [--pfamscan_e-val PFAMSCAN_E_VAL]
                         e-value threshold for pfamscan passage, usage:
                         --pfamscan_e-val 0.1 (default: 10.0)
