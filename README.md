@@ -15,11 +15,11 @@
   `python PRODRES.py [parameters]`
   - [-h show help]
   - [--pfamscan_e-val PFAMSCAN_E_VAL]
-  - e-value threshold for pfamscan passage, 
-  usage: --pfamscan_e-val 0.1 (default: 10.0)
-  - --pfamscan_bitscore PFAMSCAN_BITSCORE
-                        bit-value threshold for pfamscan passage, usage:
-                        --pfamscan_bitscore 5 (default: None)
+  - e-value threshold for pfamscan passage,   
+  usage: --pfamscan_e-val 0.1 (default: 10.0)  
+  - [--pfamscan_bitscore PFAMSCAN_BITSCORE]  
+    bit-value threshold for pfamscan passage, usage:  
+    --pfamscan_bitscore 5 (default: None)
                   --pfamscan_clan-overlap PFAMSCAN_CLAN_OVERLAP
                         enable pfamscan resolve clan overlaps (default: True)
                   --jackhmmer_max_iter JACKHMMER_MAX_ITER
