@@ -34,13 +34,12 @@
                         set the number of iterations for psiblast (default: 3)
   - [--psiblast_e-val PSIBLAST_E_VAL]  
                         set the e-value threshold for psiblast, usage: --psiblast_e-val 0.1 (default: 0.1)
-  - [--psiblast_outfmt PSIBLAST_OUTFMT]
+  - [--psiblast_outfmt PSIBLAST_OUTFMT]  
                         set the outformat for psiblast, refer to blast manual (default: None)  
-  - [--input INPUT_FILE]
+  - [--input INPUT_FILE]  
                         input file that needs to be in fasta format, can be one or more sequences (default: None)
   - [--output OUTPUT]       
-                        the path to the output folder. The folder will be  
-                        created if it does not exist already. (default: None)
+                        the path to the output folder. The folder will be created if it does not exist already. (default: None)
   - [--second-search {psiblast,jackhmmer}]
   - [--jackhmmer-threshold-type {e-value,bit-score}]
   - [--pfam-dir PFAM_DIR]     
