@@ -12,9 +12,9 @@
 - Use the hmmpress command from the hmmer software on the Pfam-A.hmm file
 - Create a folder, e.g. pfam/ and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
 - Running the workflow:
-  - Basic usage: `python PRODRES.py [parameters]`
+  `python PRODRES.py [parameters]`
                   *-h show help 
-                  [--pfamscan_e-val PFAMSCAN_E_VAL]
+  - [--pfamscan_e-val PFAMSCAN_E_VAL]
                         e-value threshold for pfamscan passage, usage:
                         --pfamscan_e-val 0.1 (default: 10.0)
                   --pfamscan_bitscore PFAMSCAN_BITSCORE
