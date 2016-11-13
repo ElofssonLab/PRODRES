@@ -18,45 +18,40 @@
   - e-value threshold for pfamscan passage,   
   usage: --pfamscan_e-val 0.1 (default: 10.0)  
   - [--pfamscan_bitscore PFAMSCAN_BITSCORE]  
-    bit-value threshold for pfamscan passage, usage:  
-    --pfamscan_bitscore 5 (default: None)
-                  --pfamscan_clan-overlap PFAMSCAN_CLAN_OVERLAP
+    bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5 (default: None)  
+  - [--pfamscan_clan-overlap PFAMSCAN_CLAN_OVERLAP]  
                         enable pfamscan resolve clan overlaps (default: True)
-                  --jackhmmer_max_iter JACKHMMER_MAX_ITER
+  - [--jackhmmer_max_iter JACKHMMER_MAX_ITER]  
                         set the maximum number of iterations for jackhmmer
                         (default: 3)
-                  --jackhmmer_e-val JACKHMMER_E_VAL
+  - [--jackhmmer_e-val JACKHMMER_E_VAL]  
                         set the e-value threshold for jackhmmer, usage:
                         --jackhmmer_e-val 0.1 (default: None)
-                  --jackhmmer_bitscore JACKHMMER_BITSCORE
+  - [--jackhmmer_bitscore JACKHMMER_BITSCORE]  
                         set the bitscore threshold for jackhmmer (jackhmmer
-                        option --incT), usage: --jackhmmer_bitscore 10
-                        (default: 25.0)
-                  --psiblast_iter PSIBLAST_ITER
+                        option --incT), usage: --jackhmmer_bitscore 10 (default: 25.0)
+  - [--psiblast_iter PSIBLAST_ITER]  
                         set the number of iterations for psiblast (default: 3)
-                  --psiblast_e-val PSIBLAST_E_VAL
-                        set the e-value threshold for psiblast, usage:
-                        --psiblast_e-val 0.1 (default: 0.1)
-                  --psiblast_outfmt PSIBLAST_OUTFMT
-                        set the outformat for psiblast, refer to blast manual
-                        (default: None)
-                  --input INPUT_FILE    
-                        input file that needs to be in fasta format, can be
-                        one or more sequences (default: None)
-                  --output OUTPUT       
-                        the path to the output folder. The folder will be
+  - [--psiblast_e-val PSIBLAST_E_VAL]  
+                        set the e-value threshold for psiblast, usage: --psiblast_e-val 0.1 (default: 0.1)
+  - [--psiblast_outfmt PSIBLAST_OUTFMT]
+                        set the outformat for psiblast, refer to blast manual (default: None)  
+  - [--input INPUT_FILE]
+                        input file that needs to be in fasta format, can be one or more sequences (default: None)
+  - [--output OUTPUT]       
+                        the path to the output folder. The folder will be  
                         created if it does not exist already. (default: None)
-                  --second-search {psiblast,jackhmmer}
-                  --jackhmmer-threshold-type {e-value,bit-score}
-                  --pfam-dir PFAM_DIR   
-                        pfam dir path (default: None)
-                  --pfamscan-script PFAMSCAN_SCRIPT
-                        path to pfam_scan.pl (default: None)
-                  --uniprot-db-fasta UNIPROT_DB_FASTA
-                        path to uniprot_db fasta file (default: None)
-                  --pfam_database_dimension PFAM_DATABASE_DIMENSION
-                        dimension of pfam database (default: 28332677)
-                  --verbose  output more information (default: False)
+  - [--second-search {psiblast,jackhmmer}]
+  - [--jackhmmer-threshold-type {e-value,bit-score}]
+  - [--pfam-dir PFAM_DIR]     
+                        pfam dir path (default: None)  
+  - [--pfamscan-script PFAMSCAN_SCRIPT]  
+                        path to pfam_scan.pl (default: None)  
+  - [--uniprot-db-fasta UNIPROT_DB_FASTA]  
+                        path to uniprot_db fasta file (default: None)  
+  - [--pfam_database_dimension PFAM_DATABASE_DIMENSION]  
+                        dimension of pfam database (default: 28332677)  
+  - [--verbose  output more information (default: False)
 
 - example call for 1 sequence using PSI-BLAST to create the PSSM:       
 `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
