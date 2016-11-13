@@ -13,11 +13,11 @@
 - Create a folder, e.g. pfam/ and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
 - Running the workflow:
   `python PRODRES.py [parameters]`
-                  *-h show help 
+  - [-h show help]
   - [--pfamscan_e-val PFAMSCAN_E_VAL]
-                        e-value threshold for pfamscan passage, usage:
-                        --pfamscan_e-val 0.1 (default: 10.0)
-                  --pfamscan_bitscore PFAMSCAN_BITSCORE
+  - e-value threshold for pfamscan passage, 
+  usage: --pfamscan_e-val 0.1 (default: 10.0)
+  - --pfamscan_bitscore PFAMSCAN_BITSCORE
                         bit-value threshold for pfamscan passage, usage:
                         --pfamscan_bitscore 5 (default: None)
                   --pfamscan_clan-overlap PFAMSCAN_CLAN_OVERLAP
