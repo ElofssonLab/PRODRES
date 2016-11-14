@@ -10,7 +10,7 @@
 - Download current PSI-BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
 - Download hmmer software (from http://hmmer.org/download.html)
 - Use the hmmpress command from the hmmer software on the Pfam-A.hmm file
-- Create a folder, e.g. pfam/ and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
+- Create a folder, e.g. `pfam/` and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
 - Running the workflow:
   `python PRODRES.py [parameters]`
   - [-h show help]
@@ -52,10 +52,10 @@
                         dimension of pfam database (default: 28332677)  
   - [--verbose  output more information (default: False)
 
-- example call for 1 sequence using PSI-BLAST to create the PSSM:       
+- example call for 1 sequence using PSI-BLAST to create a PSSM:       
 `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
 
-- example call for multiple sequences using JACKHMMER to create the PSSM:        
+- example call for multiple sequences using JACKHMMER to create a pHMM:        
 `python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
 
 # PRODRES Docker portable version 
@@ -72,9 +72,9 @@ in order to install:
 4. Access the virtual machine with a ready-to-execute prodres pipeline using:              
   - `docker run -t -i prodres`
   - then access prodres/ folder and call the pipeline     
-  - example call for 1 sequence using PSI-BLAST to create the PSSM:    
+  - example call for 1 sequence using PSI-BLAST to create a PSSM:    
   `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
-  - example call for multiple sequences using JACKHMMER to create the PSSM:    
+  - example call for multiple sequences using JACKHMMER to create a pHMM:    
   `python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
 
 5. Alternatively, import an input folder from local machine with:     
