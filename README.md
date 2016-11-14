@@ -7,9 +7,9 @@
 - Download and unzip PfamScan.pl tool from ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/PfamScan.tar.gz
 - Download the database from http://topcons.net/static/download/prodres_db/30.0/prodres_db.nr90.sqlite3 inside the PRODRES folder 
 - Download a fall-back database, e.g. Uniref90 (from ftp://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz)
-- Download current PSI-BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
+- Download current BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
 - Download hmmer software (from http://hmmer.org/download.html)
-- Use the hmmpress command from the hmmer software on the Pfam-A.hmm file
+- Use the `hmmpress` command from the hmmer software on the Pfam-A.hmm file and the `makeblastdb` on the fall-back (e.g. Uniref90) database
 - Create a folder, e.g. `pfam/` and put the files `Pfam-A.hmm.dat`, `Pfam-A.hmm` and the created files `Pfam-A.hmm.h3f`, `Pfam-A.hmm.h3m`, `Pfam-A.hmm.h3i` and `Pfam-A.hmm.h3p` inside it
 - Running the workflow:
   `python PRODRES.py [parameters]`
