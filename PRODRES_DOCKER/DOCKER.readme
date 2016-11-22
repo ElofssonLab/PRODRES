@@ -1,24 +1,29 @@
-### fastPSSM Docker portable version ###
+### PRODRES Docker portable version ###
 
 in order to install: 
-1) have DockerFile in the same folder of src/ and test/
+1) copy PRODRES/ folder in here
 
-2) execute the following command (remember the dot at the end): docker build -t fastpssm .
+2) execute the following command (remember the dot at the end):
+       docker build -t prodres .
 
-3) wait for the long build that require databases to be downloaded
+3a) you can access the virtual machine ready to execute the pipeline with:
+       docker run -t -i prodres
+3b) if you wish to connect a folder for input/output/database usage, then type instead:
+       docker run -t -i -v /path/to/import/:/importname/ prodres
 
-4a) you can access the virtual machine ready to execute fastpssm with: docker run -t -i fastpssm
-    then access /fastpssm/ folder and call the pipeline as usual with:
-       python fastPSSM.py --second-search jackhmmer \
+4) in case you are missing databases (pfam,uniref90), you can run downloadDB.sh inside the docker
+
+5) access /opt/PRODRES/ folder and call the pipeline as usual with:
+       python PRODRES.py --second-search jackhmmer \
               --jackhmmer-threshold-type bit-score \
-	      --pfam-dir ../database_fastPSSM/pfam/ \
-	      --pfamscan-script ../database_fastPSSM/pfam_seq/PfamScan/pfam_scan.pl \
-	      --uniprot-db-fasta ../database_fastPSSM/blast/uniref90.fasta \
-	      --input /examples/prova1.fa \
-	      --output /examples/prova1/
+	      --pfam-dir /import/pfam/ \
+	      --pfamscan-script /opt/PfamScan/pfam_scan.pl \
+	      --uniprot-db-fasta /import/uniprot/uniref90.fasta \
+	      --input test/single_seq.fa \
+	      --output /import/prova1/
 
 
-It is possible to keep a list of arguments in a file that has a file name starting with "@".
+extra) It is possible to keep a list of arguments in a file that has a file name starting with "@".
 The options should then be seperated by newlines.
 
 user@user:~$ cat args.txt
@@ -32,10 +37,9 @@ bit-score
 ../database_fastPSSM/pfam_seq/PfamScan/pfam_scan.pl
 --uniprot-db-fasta
 ../database_fastPSSM/blast/uniref90.fasta
-user@user:~$ python fastPSSM.py @args.txt \
+user@user:~$ python PRODRES.py @args.txt \
 	      --input /examples/prova1.fa \
 	      --output /examples/prova1/
 user@user:~$
 
-4b) or you can import an input folder from local machine with: docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ fastpssm
-    then access /fastpssm/ and call the pipeline to the imported data: python fastPSSM.py --input /path/in/virtualmachine/filename.fasta --output /path/in/virtualmachine/output/ @args.txt
+

@@ -1,0 +1,14 @@
+--input
+test/single_seq.fa
+--output
+/import/test_output
+--second-search
+jackhmmer
+--pfam-dir
+/import/pfam/
+--pfamscan-script
+/opt/PfamScan/pfam_scan.pl
+--uniprot-db-fasta
+/import/uniprot/uniref90.fasta
+--jackhmmer-threshold-type
+bit-score

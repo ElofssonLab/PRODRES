@@ -17,3 +17,7 @@ tmp/
 ./PRODRES/logs/
 ./PRODRES_DOCKER/src/
 ./PRODRES_DOCKER/test/
+
+# DOCKER second screept version
+
+./PRODRES_DOCKER/PRODRES/
