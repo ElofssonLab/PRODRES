@@ -11,7 +11,7 @@ import subprocess
 def create_parser(argv):
     """Create a command line parser with all arguments defined."""
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, fromfile_prefix_chars='@')
-    parser.add_argument('--pfamscan_e-val', default="10.0", type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
+    parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
     parser.add_argument('--pfamscan_bitscore', default=None, type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
     parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
     parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
