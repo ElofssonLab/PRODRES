@@ -60,10 +60,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
         if args.pfamscan_clan_overlap == True:
             pfamscan_args += ["-clan_overlap"]
-        if args.pfamscan_bitscore:
-            pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
-        else:
+        if args.pfamscan_e_val:
             pfamscan_args += ["-e_seq", args.pfamscan_e_val]
+        else:
+            pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
         pfamscan_args += ["-fasta", args.input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
 

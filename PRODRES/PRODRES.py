@@ -11,8 +11,8 @@ import subprocess
 def create_parser(argv):
     """Create a command line parser with all arguments defined."""
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, fromfile_prefix_chars='@')
-    parser.add_argument('--pfamscan_e-val', default="10.0", type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
-    parser.add_argument('--pfamscan_bitscore', default=None, type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
+    parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 10')
+    parser.add_argument('--pfamscan_bitscore', default="2", type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
     parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
     parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
     parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer, usage: --jackhmmer_e-val 0.1')
@@ -44,7 +44,7 @@ def create_parser(argv):
     parser.add_argument('--pfam-dir', required=True, type=str, help='pfam dir path')
     parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
     parser.add_argument('--uniprot-db-fasta', required=True, type=str, help='path to uniprot_db fasta file')
-    parser.add_argument('--pfam_database_dimension', type=int, default=28332677, help="dimension of pfam database")
+    parser.add_argument('--pfam_database_dimension', type=int, default=47230144, help="dimension of pfam database") #old dim: 28332677
     parser.add_argument("--verbose", action='store_true', help="output more information")
     return parser
 
