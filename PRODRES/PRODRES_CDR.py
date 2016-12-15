@@ -60,10 +60,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
         if args.pfamscan_clan_overlap == True:
             pfamscan_args += ["-clan_overlap"]
-        if args.pfamscan_bitscore:
-            pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
-        elif args.pfamscan_e_val:
+        if args.pfamscan_e_val:
             pfamscan_args += ["-e_seq", args.pfamscan_e_val]
+        elif args.pfamscan_bitscore:
+            pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
         pfamscan_args += ["-fasta", args.input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
 
@@ -118,6 +118,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             jackhmmer_args += ["-A", aligfile]
             jackhmmer_args += ["-Z", str(args.pfam_database_dimension)]
             jackhmmer_args += ["--chkhmm", hmmfile]
+            if args.threads:
+                jackhmmer_args += ["-cpu", args.threads]
             jackhmmer_args += [input_file]
             jackhmmer_args += [dbfile]
 
@@ -146,7 +148,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
             if os.path.exists(dbfile+".psq") == False and args.paramK:
                 dbfile = args.uniprot_db_fasta
-                print("WARNING! CDR database is void, performing search in full DB")
+                print("WARNING! CDR database is void or Pfamscan is not working, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found void, searching in full DB")
                 # PREPARING FALLBACK DATABASE
                 if not os.path.exists(dbfile + ".blastdb.psq"):
@@ -164,8 +166,11 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             psiblast_args += ["-out_ascii_pssm", pssmfile]
             psiblast_args += ["-query", input_file]
             psiblast_args += ["-db", dbfile]
-            if (args.psiblast_outfmt != None):
+            if args.psiblast_outfmt != None:
                 psiblast_args += ["-outfmt", args.psiblast_outfmt]
+            if args.threads:
+                psiblast_args += ["-num_threads", args.threads]
+
             psiblast_cmd = ["psiblast"] + psiblast_args
             psiblast_cmd_str = " ".join(psiblast_cmd)
             print("\t>performing>>"+ psiblast_cmd_str)

@@ -11,41 +11,37 @@ import subprocess
 def create_parser(argv):
     """Create a command line parser with all arguments defined."""
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, fromfile_prefix_chars='@')
-    parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
-    parser.add_argument('--pfamscan_bitscore', default=None, type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
-    parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
-    parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
-    parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer, usage: --jackhmmer_e-val 0.1')
-    parser.add_argument('--jackhmmer_bitscore', type=str, default="25.0", help='set the bitscore threshold for jackhmmer (jackhmmer option --incT), usage: --jackhmmer_bitscore 10')
-    parser.add_argument('--psiblast_iter', type=str, default="3", help='set the number of iterations for psiblast')
-    parser.add_argument('--psiblast_e-val', type=str, default="0.1", help='set the e-value threshold for psiblast, usage: --psiblast_e-val 0.1')
 
-    # A question:
-    # Although --psiblast_outfmt is being listed as a command line option
-    # in the file
-    # https://github.com/ElofssonLab/FastPSSM/blob/a825496ed7bfdee30256a943fe3c6495c1265895/fastPSSM/fastPSSM_parser.py
-    # the value given by the user is ignored in the code:
-    # https://github.com/ElofssonLab/FastPSSM/blob/a825496ed7bfdee30256a943fe3c6495c1265895/fastPSSM/fastPSSM_CDR.py
-    #
-    # Should we have the
-    # --psiblast_outfmt
-    # option or not?
-    #
-    # Right now the option value is being used in the code
-
-    parser.add_argument('--psiblast_outfmt', type=str, help='set the outformat for psiblast, refer to blast manual')
+    # General parameters
     parser.add_argument('--input', dest="input_file", required=True, help='input file that needs to be in fasta format, can be one or more sequences')
     parser.add_argument('--output', required=True, help='the path to the output folder. The folder will be created if it does not exist already.')
     parser.add_argument('--second-search', required=True, choices=['psiblast', 'jackhmmer'])
-    parser.add_argument('--jackhmmer-threshold-type', choices=['e-value', 'bit-score'])
     parser.add_argument('--paramK', default=True, help='The paramK flag. TODO write more documentation.')
     # Do we get better error handling out of the box if make use
     # of "type=file" for the directory path and file path options?
     parser.add_argument('--pfam-dir', required=True, type=str, help='pfam dir path')
-    parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
     parser.add_argument('--uniprot-db-fasta', required=True, type=str, help='path to uniprot_db fasta file')
     parser.add_argument('--pfam_database_dimension', type=int, default=47230144, help="dimension of pfam database") #old dim: 28332677
     parser.add_argument("--verbose", action='store_true', help="output more information")
+    parser.add_argument('--threads', type=str, default=None, help="number of threads (CPUs) to be used in second search")
+
+    # Pfamscan parameters
+    parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
+    parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
+    parser.add_argument('--pfamscan_bitscore', default=2, type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
+    parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
+
+    # Jackhmmer parameters
+    parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
+    parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer, usage: --jackhmmer_e-val 0.1')
+    parser.add_argument('--jackhmmer_bitscore', type=str, default="25.0", help='set the bitscore threshold for jackhmmer (jackhmmer option --incT), usage: --jackhmmer_bitscore 10')
+    parser.add_argument('--jackhmmer-threshold-type', choices=['e-value', 'bit-score'])
+
+    # Psiblast parameters
+    parser.add_argument('--psiblast_iter', type=str, default="3", help='set the number of iterations for psiblast')
+    parser.add_argument('--psiblast_e-val', type=str, default="0.1", help='set the e-value threshold for psiblast, usage: --psiblast_e-val 0.1')
+    parser.add_argument('--psiblast_outfmt', type=str, help='set the outformat for psiblast, refer to blast manual')
+
     return parser
 
 
