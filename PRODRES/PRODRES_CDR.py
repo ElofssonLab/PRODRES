@@ -64,7 +64,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             pfamscan_args += ["-e_seq", args.pfamscan_e_val]
         elif args.pfamscan_bitscore:
             pfamscan_args += ["-b_seq", args.pfamscan_bitscore]
-        pfamscan_args += ["-fasta", args.input_file]
+        pfamscan_args += ["-fasta", input_file]
         pfamscan_args += ["-dir", args.pfam_dir]
 
         pfamscan_cmd = [args.pfamscan_script] + pfamscan_args
