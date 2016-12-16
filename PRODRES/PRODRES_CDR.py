@@ -181,9 +181,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
                 indb = psiblast_cmd.index("-db")
                 dbfile = args.uniprot_db_fasta
-                psiblast_cmd[indb+1] = dbfile+".blastdb"
-                if not os.path.exists(dbfile + ".blastdb.psq"):
-                    os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
+                psiblast_cmd[indb+1] = dbfile
                 call(psiblast_cmd)
             print("\t\t>end")
         else:
