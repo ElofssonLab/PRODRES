@@ -143,17 +143,16 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
         elif args.second_search == "psiblast":
             # prepare db
             dbfile = tempdir + "/QUERY.hits.db"
-            os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
-            dbfile += ".blastdb"
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
-            if os.path.exists(dbfile+".psq") == False and args.paramK:
+            if os.path.getsize(dbfile) == 0 and args.paramK:
                 dbfile = args.uniprot_db_fasta
                 print("WARNING! CDR database is void or Pfamscan is not working, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found void, searching in full DB")
-                # PREPARING FALLBACK DATABASE
-                if not os.path.exists(dbfile + ".blastdb.psq"):
-                    os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
-                    dbfile += ".blastdb"
+            else:
+                os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
+                dbfile += ".blastdb"
+            
+
             # prepare other param
             outfile = outputdir + "/psiOutput.txt"
             pssmfile = outputdir + "/psiPSSM.txt"

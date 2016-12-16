@@ -28,7 +28,7 @@ def create_parser(argv):
     # Pfamscan parameters
     parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
     parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
-    parser.add_argument('--pfamscan_bitscore', default=2, type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
+    parser.add_argument('--pfamscan_bitscore', default="2", type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
     parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
 
     # Jackhmmer parameters
