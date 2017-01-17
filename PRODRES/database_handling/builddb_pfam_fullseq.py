@@ -58,11 +58,12 @@ OPTIONS:
   -cutoff    INT     Sequence identity cutoff (percentages) within the family, (default: 90)
                      cd-hit is used to reduce the sequence redundancy
   -cdhit     PATH    Set the path where it contains cd-hit executable
+  -nocdhit           Do not run CD-HIT, use all hits
   -verbose           Show verbose information
   -debug             Run in debug mode
   -h, --help         print this help message and exit
 
-Created 2016-07-07, updated 2016-11-08, Nanjiang Shu
+Created 2016-07-07, updated 2017-01-17, Nanjiang Shu
 
 Examples:
 
@@ -541,17 +542,22 @@ def CreatePfamFullseqDB(alnfile, seqidt_cutoff, seqdbname, seqtablename, outdb):
             if seqidt_cutoff <= 100:
 # run sequence identity cutoff
                 out_nrfullseqfile = "%s%s%s.nr%d.fasta"%(tmpdir, os.sep, rd['ac'], seqidt_cutoff)
-                wordsize = GetCDHitWordSize(seqidt_cutoff/100.0)
-# -T -0 using all CPUs
-                cmd = [g_params['exec_cdhit'], "-i", out_fullseqfile, "-o", out_nrfullseqfile, "-c", str(seqidt_cutoff/100.0), "-n", str(wordsize), "-T", "0"]
-                cmdline = " ".join(cmd)
                 is_run_cdhit_success = False
-                try:
-                    subprocess.check_call(cmd)
+                if g_params['isRunCDHIT']:
+                    wordsize = GetCDHitWordSize(seqidt_cutoff/100.0)
+# -T -0 using all CPUs
+                    cmd = [g_params['exec_cdhit'], "-i", out_fullseqfile, "-o", out_nrfullseqfile, "-c", str(seqidt_cutoff/100.0), "-n", str(wordsize), "-T", "0"]
+                    cmdline = " ".join(cmd)
+                    try:
+                        subprocess.check_call(cmd)
+                        is_run_cdhit_success = True
+                    except subprocess.CalledProcessError, e:
+                        print >> sys.stderr, e
+                        print "cmdline: %s"%(cmdline)
+                else:
                     is_run_cdhit_success = True
-                except subprocess.CalledProcessError, e:
-                    print >> sys.stderr, e
-                    print "cmdline: %s"%(cmdline)
+                    out_nrfullseqfile = out_fullseqfile
+
                 if is_run_cdhit_success and os.path.exists(out_nrfullseqfile):
                     numseq_nr = myfunc.CountFastaSeq(out_nrfullseqfile)
                     if g_params['verbose']:
@@ -660,6 +666,9 @@ def main(g_params):#{{{
             elif argv[i] in ["-nooverwrite", "--nooverwrite"]:
                 g_params['nooverwrite'] = True
                 i += 1
+            elif argv[i] in ["-nocdhit", "--nocdhit"]:
+                g_params['isRunCDHIT'] = False
+                i += 1
             elif argv[i] in ["-debug", "--debug"]:
                 g_params['debug'] = True
                 i += 1
@@ -702,14 +711,15 @@ def main(g_params):#{{{
         print >> sys.stderr, "outpath not set. Exit!"
         return 1
 
-    if path_cdhit == "":
-        print >> sys.stderr, "path_cdhit not set. Exit!"
-        return 1
-    elif not IsProgExist("%s%scd-hit"%(path_cdhit, os.sep)):
-        print >> sys.stderr, "path_cdhit is set, but %s does not exist or not executable. Exit!"%("%s/cd-hit"%(path_cdhit))
-        return 1
-    else:
-        g_params['exec_cdhit'] = "%s%scd-hit"%(path_cdhit, os.sep)
+    if g_params['isRunCDHIT']:
+        if path_cdhit == "":
+            print >> sys.stderr, "path_cdhit not set. Exit!"
+            return 1
+        elif not IsProgExist("%s%scd-hit"%(path_cdhit, os.sep)):
+            print >> sys.stderr, "path_cdhit is set, but %s does not exist or not executable. Exit!"%("%s/cd-hit"%(path_cdhit))
+            return 1
+        else:
+            g_params['exec_cdhit'] = "%s%scd-hit"%(path_cdhit, os.sep)
 
 #========================================================
 # Download the pfam uniprot alignment database if not exists
@@ -803,6 +813,7 @@ def InitGlobalParameter():#{{{
     g_params['uniprot_trembl_fastafile'] = "uniprot_trembl.fasta.gz"
     g_params['uniprot_trembl_versionfile'] = "reldate.txt"
 
+    g_params['isRunCDHIT'] = True
     g_params['isQuiet'] = True
     g_params['verbose'] = False
     g_params['nooverwrite'] = False
