@@ -5,7 +5,7 @@
   - Pfam-A.hmm.dat.gz (ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.dat.gz)
   - Pfam-A.hmm.gz (ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz)
 - Download and unzip PfamScan.pl tool from ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/PfamScan.tar.gz
-- Download the database from http://topcons.net/static/download/prodres_db/30.0/prodres_db.nr90.sqlite3 inside the PRODRES folder 
+- Download the database from http://topcons.net/static/download/prodres_db/30.0_all/prodres_db.nr100.sqlite3 inside the PRODRES folder 
 - Download a fall-back database, e.g. Uniref90 (from ftp://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz)
 - Download current BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
 - Download hmmer software (from http://hmmer.org/download.html)
