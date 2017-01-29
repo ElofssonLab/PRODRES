@@ -17,11 +17,9 @@ def create_parser(argv):
     parser.add_argument('--output', required=True, help='the path to the output folder. The folder will be created if it does not exist already.')
     parser.add_argument('--second-search', required=True, choices=['psiblast', 'jackhmmer'])
     parser.add_argument('--paramK', default=True, help='The paramK flag. TODO write more documentation.')
-    # Do we get better error handling out of the box if make use
-    # of "type=file" for the directory path and file path options?
     parser.add_argument('--pfam-dir', required=True, type=str, help='pfam dir path')
     parser.add_argument('--uniprot-db-fasta', required=True, type=str, help='path to uniprot_db fasta file')
-    parser.add_argument('--pfam_database_dimension', type=int, default=47230144, help="dimension of pfam database") #old dim: 28332677
+    parser.add_argument('--pfam_database_dimension', type=int, default=56526462, help="dimension of pfam database") #refers to Uniprot 2016_2
     parser.add_argument("--verbose", action='store_true', help="output more information")
     parser.add_argument('--threads', type=str, default=None, help="number of threads (CPUs) to be used in second search")
 
@@ -116,11 +114,6 @@ def main(argv):
     subprocess.check_output(["jackhmmer", "-h"])
     subprocess.check_output(["psiblast", "-help"])
     subprocess.check_output(["python", "--version"])
-    # PFAMSCAN TEST MODIFIED TO FILE EXISTANCE
-    #try:
-    #    subprocess.Popen(["sh","-c",args.pfamscan_script,"-h",">/dev/null"])
-    #except subprocess.CalledProcessError as e:
-    #    raise RuntimeError("{}>>Problem detected executing pfamscan.pl test, did you check all its dependencies?<<".format(e.output))
     verify_readable_file_path(args.pfamscan_script)
 
     if not os.path.exists(args.output):
@@ -138,13 +131,6 @@ def main(argv):
 
 
     log_level = logging.INFO
-
-    # Right now --verbose does not change anything.
-    # Maybe we could let it change the logging leve like this?
-    #
-    # if args.verbose:
-    #    log_level = logging.DEBUG
-
     if not os.path.exists("logs"):
         os.mkdir("logs")
     logging.basicConfig(filename='logs/{}run.log'.format(datetime.datetime.today()), level=log_level, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
@@ -155,15 +141,6 @@ def main(argv):
 
     print("Ending Environment testing.")
     logging.info('\t> End.')
-
-#    logging.info('\t> Input parsing...')
-#    print("Beginning input parsing...")
-
-#    inp = INPUT_PARSER(argv, args)
-
-#    print("Ending input parsing.")
-#    logging.info('\t> End.')
-# ???
     logging.info('\t> CDR...')
 
     with open(args.input_file,"rU") as seqFile:

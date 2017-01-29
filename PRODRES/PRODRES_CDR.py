@@ -20,7 +20,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             name= name+"+"
         else:
             try:
-                regexp = re.search(r"\|([^\|]+)\|",entry.id) # for names like tr|Q8XP35|Q8XP35_CLOPE/tr|Q8XP35|Q8XP35_CLOPE
+                regexp = re.search(r"\|([^\|]+)\|",entry.id) 
                 name = regexp.group(1)
             except AttributeError:
                 name = entry.id
@@ -85,7 +85,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                     pos = line.find("PF")
                     if pos != -1:
                         pfamList.append(line[pos:pos + 7])
-        pfam_seq_db = args.pfam_dir +"/prodres_db.nr90.sqlite3"
+        pfam_seq_db = args.pfam_dir +"/prodres_db.nr100.sqlite3"
 
         # handling the Pfam DB
         createHitDB(list(set(pfamList)), tempdir, pfam_seq_db)
@@ -96,8 +96,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             dbfile = tempdir + "/QUERY.hits.db"
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
             if os.path.getsize(dbfile) == 0 and args.paramK:
-                print("WARNING! CDR database is void, performing search in full DB")
-                logging.warning("\t\t\t>CDR database found void, searching in full DB")
+                print("WARNING! CDR database is empty, performing search in full DB")
+                logging.warning("\t\t\t>CDR database found empty, searching in full DB")
                 dbfile = args.uniprot_db_fasta
             aligfile = outputdir + "/Alignment.txt"
             fullout = outputdir + "/fullOut.txt"
@@ -146,8 +146,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
             if os.path.getsize(dbfile) == 0 and args.paramK:
                 dbfile = args.uniprot_db_fasta
-                print("WARNING! CDR database is void or Pfamscan is not working, performing search in full DB")
-                logging.warning("\t\t\t>CDR database found void, searching in full DB")
+                print("WARNING! CDR database is empty or Pfamscan is not working, performing search in full DB")
+                logging.warning("\t\t\t>CDR database found empty, searching in full DB")
             else:
                 os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
                 dbfile += ".blastdb"
