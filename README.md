@@ -7,6 +7,7 @@
 - Download and unzip PfamScan.pl tool from ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/PfamScan.tar.gz
 - Download the database from http://topcons.net/static/download/prodres_db/30.0_all/prodres_db.nr100.sqlite3 inside the PRODRES folder 
 - Download a fall-back database, e.g. Uniref90 (from ftp://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref90/uniref90.fasta.gz)
+- Specify with the option --pfam_database_dimension the database size (number of sequences) of your fall-back database so that PRODRES works properly
 - Download current BLAST version (from ftp://ftp.ncbi.nih.gov/blast/executables/LATEST/)
 - Download hmmer software (from http://hmmer.org/download.html)
 - Use the `hmmpress` command from the hmmer software on the Pfam-A.hmm file and the `makeblastdb` on the fall-back (e.g. Uniref90) database
