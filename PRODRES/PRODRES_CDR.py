@@ -119,7 +119,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             jackhmmer_args += ["-Z", str(args.pfam_database_dimension)]
             jackhmmer_args += ["--chkhmm", hmmfile]
             if args.threads:
-                jackhmmer_args += ["-cpu", args.threads]
+                jackhmmer_args += ["--cpu", args.threads]
             jackhmmer_args += [input_file]
             jackhmmer_args += [dbfile]
 
