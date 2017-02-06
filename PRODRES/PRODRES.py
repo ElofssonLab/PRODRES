@@ -27,12 +27,12 @@ def create_parser(argv):
     parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
     parser.add_argument('--pfamscan_e-val', default=None, type=str, help='e-value threshold for pfamscan passage, usage: --pfamscan_e-val 0.1')
     parser.add_argument('--pfamscan_bitscore', default="2", type=str, help='bit-value threshold for pfamscan passage, usage: --pfamscan_bitscore 5')
-    parser.add_argument('--pfamscan_clan-overlap', default=True, help='enable pfamscan resolve clan overlaps ')
+    parser.add_argument('--pfamscan_clan-overlap', default=True, type=bool, help='enable pfamscan resolve clan overlaps [True,False]')
 
     # Jackhmmer parameters
     parser.add_argument('--jackhmmer_max_iter', type=str, default="3", help='set the maximum number of iterations for jackhmmer')
     parser.add_argument('--jackhmmer_e-val', type=str, default=None, help='set the e-value threshold for jackhmmer, usage: --jackhmmer_e-val 0.1')
-    parser.add_argument('--jackhmmer_bitscore', type=str, default="25.0", help='set the bitscore threshold for jackhmmer (jackhmmer option --incT), usage: --jackhmmer_bitscore 10')
+    parser.add_argument('--jackhmmer_bit-score', type=str, default="25.0", help='set the bit-score threshold for jackhmmer (jackhmmer option --incT), usage: --jackhmmer_bit-score 10')
     parser.add_argument('--jackhmmer-threshold-type', choices=['e-value', 'bit-score'])
 
     # Psiblast parameters
@@ -45,8 +45,8 @@ def create_parser(argv):
 
 def verify_consistency_of_arguments(args):
     """Verify that the command line are logically correct."""
-    if (args.jackhmmer_e_val != None and args.jackhmmer_bitscore != None):
-        raise RuntimeError("both --jackhmmer_e-val and --jackhmmer_bitscore can not be specified at the same time")
+    if (args.jackhmmer_e_val != None and args.jackhmmer_bit_score != None):
+        raise RuntimeError("both --jackhmmer_e-val and --jackhmmer_bit-score can not be specified at the same time")
     if (args.second_search == 'jackhmmer' and args.jackhmmer_threshold_type == None):
         raise RuntimeError("--jackhmmer-threshold-type is missing (required by --second-search=jackhmmer)")
 
@@ -99,8 +99,8 @@ def main(argv):
     # fix with parser mutually exclusive maybe?
     a = vars(args)
     if a.get("jackhmmer_e_val",False):
-        a["jackhmmer_bitscore"] = None
-    if a.get("pfamscan_bitscore",False):
+        a["jackhmmer_bit_score"] = None
+    if a.get("pfamscan_bit_score",False):
         a["pfamscan_e-val"] = None
 
     verify_consistency_of_arguments(args)
@@ -142,7 +142,7 @@ def main(argv):
     print("Ending Environment testing.")
     logging.info('\t> End.')
     logging.info('\t> CDR...')
-
+    
     with open(args.input_file,"rU") as seqFile:
         inpt = list(SeqIO.parse(seqFile, "fasta"))
         length = len(inpt)

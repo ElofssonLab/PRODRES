@@ -5,6 +5,7 @@ import sys
 import logging
 import json
 import sqlite3
+import datetime
 
 def COMMON_DOMAINS_REDUCTION(args, inp):
 
@@ -13,6 +14,11 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
     name = ""
     # one output directory every fasta seq
     for entry in inp:
+
+        # time output stuff
+        s_time = datetime.datetime.today()
+        db_used = "pfam"
+        
         #basic name handling
         if entry.id == "":
             name = "seq"+str(counter)
@@ -58,7 +64,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
         pfamscan_args = []
 
-        if args.pfamscan_clan_overlap == True:
+        if args.pfamscan_clan_overlap:
             pfamscan_args += ["-clan_overlap"]
         if args.pfamscan_e_val:
             pfamscan_args += ["-e_seq", args.pfamscan_e_val]
@@ -86,6 +92,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                     if pos != -1:
                         pfamList.append(line[pos:pos + 7])
         pfam_seq_db = args.pfam_dir +"/prodres_db.nr100.sqlite3"
+        db_used = "uniref"
 
         # handling the Pfam DB
         createHitDB(list(set(pfamList)), tempdir, pfam_seq_db)
@@ -99,6 +106,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 print("WARNING! CDR database is empty, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
                 dbfile = args.uniprot_db_fasta
+                db_used = "uniref"
             aligfile = outputdir + "/Alignment.txt"
             fullout = outputdir + "/fullOut.txt"
             hmmfile = tempdir + "hmmOut"
@@ -108,7 +116,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             jackhmmer_args += ["-o", fullout]
 
             if (args.jackhmmer_threshold_type == "bit-score"):
-                jackhmmer_args += ["--incT", str(args.jackhmmer_bitscore)]
+                jackhmmer_args += ["--incT", str(args.jackhmmer_bit_score)]
             elif (args.jackhmmer_threshold_type == "e-value"):
                 jackhmmer_args += ["--incE", str(args.jackhmmer_e_val)]
             else:
@@ -128,11 +136,12 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # JACKHMMER CALL
             call(jackhmmer_cmd)
             # JACKHMMER OUTPUT TEST
-            if os.path.exists(hmmfile + "-3.hmm"):
-                os.system("cp " + hmmfile + "-3.hmm " + outputdir+"hmmOut.txt")
+            if os.path.exists(hmmfile + "-{}.hmm".format(args.jackhmmer_max_iter)):
+                os.system("cp " + hmmfile + "-{}.hmm ".format(args.jackhmmer_max_iter) + outputdir+"hmmOut.txt")
             # JACKHMMER SECOND FALLBACK FULL RUN
             elif args.paramK and jackhmmer_args[-1] != args.uniprot_db_fasta:
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
+                db_used = "uniref"
                 del(jackhmmer_args[-1])
                 jackhmmer_args += [args.uniprot_db_fasta]
                 jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
@@ -148,6 +157,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 dbfile = args.uniprot_db_fasta
                 print("WARNING! CDR database is empty or Pfamscan is not working, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
+                db_used = "uniref"
             else:
                 os.system("makeblastdb -in " + dbfile + " -out " + dbfile + ".blastdb -dbtype prot")
                 dbfile += ".blastdb"
@@ -179,6 +189,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # PSIBLAST OUTPUT TEST
             if "***** No hits found *****" in "".join(open(outfile).readlines()) and args.paramK:
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
+                db_used = "uniref"
                 indb = psiblast_cmd.index("-db")
                 dbfile = args.uniprot_db_fasta
                 psiblast_cmd[indb+1] = dbfile
@@ -186,6 +197,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             print("\t\t>end")
         else:
             raise RuntimeError("unknown option value of --second-search")
+        # time output
+        e_time = datetime.datetime.today()
+        with open(outputdir + "time.txt","w") as timefile:
+            timefile.write("0;{};{}".format((e_time-s_time).total_seconds(),db_used))
 
 def createHitDB(pfamList, work_dir,pfamseqdb):
     logging.info("\t\t\t> constructing CDR database")
