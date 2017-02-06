@@ -199,7 +199,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             raise RuntimeError("unknown option value of --second-search")
         # time output
         e_time = datetime.datetime.today()
-        with open(outputdir + "time.txt","w") as timefile:
+        with open(namedir + "time.txt","w") as timefile:
             timefile.write("0;{};{}".format((e_time-s_time).total_seconds(),db_used))
 
 def createHitDB(pfamList, work_dir,pfamseqdb):
