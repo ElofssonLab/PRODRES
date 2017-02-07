@@ -92,7 +92,6 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                     if pos != -1:
                         pfamList.append(line[pos:pos + 7])
         pfam_seq_db = args.pfam_dir +"/prodres_db.nr100.sqlite3"
-        db_used = "uniref"
 
         # handling the Pfam DB
         createHitDB(list(set(pfamList)), tempdir, pfam_seq_db)
