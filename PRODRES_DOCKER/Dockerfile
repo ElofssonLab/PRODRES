@@ -12,7 +12,7 @@ RUN mkdir -p /opt/BLAST /opt/HMMER3 /db/uniprot /db/pfam
 
 # download Nanjiang fragmented database
 RUN cd /db/pfam && \
-    curl -O http://topcons.net/static/download/prodres_db/30.0/prodres_db.nr90.sqlite3
+    curl -O http://topcons.net/static/download/prodres_db/30.0_all/prodres_db.nr100.sqlite3
 
 # download PFAMSCAN
 RUN cd opt && \
