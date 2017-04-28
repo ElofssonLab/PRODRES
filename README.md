@@ -50,8 +50,11 @@
   - [--uniprot-db-fasta UNIPROT_DB_FASTA]  
                         path to uniprot_db fasta file (default: None)  
   - [--pfam_database_dimension PFAM_DATABASE_DIMENSION]  
-                        dimension of pfam database (default: 28332677)  
-  - [--verbose  output more information (default: False)
+                        dimension of pfam database (default: 28332677)
+  - [--parallel n]       
+                        enable parallel search for multifasta files using n processes at a time
+  - [--verbose 0]       
+                        output more information (default: 1)
 
 - example call for 1 sequence using PSI-BLAST to create a PSSM:       
 `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
