@@ -9,6 +9,16 @@ import datetime
 
 def COMMON_DOMAINS_REDUCTION(args, inp):
 
+    # verbosity
+    if args.verbosity != 0:
+        def vprint(*args):
+            for arg in args:
+               print arg,
+            print
+    else:   
+        vprint = lambda *a: None
+    # end verbosity
+
     input_length = len(inp)
     counter = 1
     name = ""
@@ -47,7 +57,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             os.mkdir(outputdir)
 
         # recursive report
-        print("\t>Beginning CDR for sequence number "+str(counter)+"/"+str(input_length)+": "+name[:8])
+        vprint("\t>Beginning CDR for sequence number "+str(counter)+"/"+str(input_length)+": "+name[:8])
         counter += 1
 
         # single query file in output folder
@@ -102,7 +112,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             dbfile = tempdir + "/QUERY.hits.db"
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
             if os.path.getsize(dbfile) == 0 and args.paramK:
-                print("WARNING! CDR database is empty, performing search in full DB")
+                vprint("WARNING! CDR database is empty, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
                 dbfile = args.uniprot_db_fasta
                 db_used = "uniref"
@@ -145,7 +155,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 jackhmmer_args += [args.uniprot_db_fasta]
                 jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
                 call(jackhmmer_cmd)
-            print("\t\t>end")
+            vprint("\t\t>end")
 
         # PERFORMING PSIBLAST
         elif args.second_search == "psiblast":
@@ -154,7 +164,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
             if os.path.getsize(dbfile) == 0 and args.paramK:
                 dbfile = args.uniprot_db_fasta
-                print("WARNING! CDR database is empty or Pfamscan is not working, performing search in full DB")
+                vprint("WARNING! CDR database is empty or Pfamscan is not working, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
                 db_used = "uniref"
             else:
@@ -181,7 +191,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
 
             psiblast_cmd = ["psiblast"] + psiblast_args
             psiblast_cmd_str = " ".join(psiblast_cmd)
-            print("\t>performing>>"+ psiblast_cmd_str)
+            vprint("\t>performing>>"+ psiblast_cmd_str)
             logging.info("\t\t\t> running psiblast search: {}".format(psiblast_cmd_str))
             # PSIBLAST CALL
             call(psiblast_cmd)
@@ -193,7 +203,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 dbfile = args.uniprot_db_fasta
                 psiblast_cmd[indb+1] = dbfile
                 call(psiblast_cmd)
-            print("\t\t>end")
+            vprint("\t\t>end")
         else:
             raise RuntimeError("unknown option value of --second-search")
         # time output
