@@ -47,8 +47,8 @@
                         pfam dir path (default: None)  
   - [--pfamscan-script PFAMSCAN_SCRIPT]  
                         path to pfam_scan.pl (default: None)  
-  - [--uniprot-db-fasta UNIPROT_DB_FASTA]  
-                        path to uniprot_db fasta file (default: None)  
+  - [--fallback-db-fasta FALLBACK_DB_FASTA]  
+                        path to fallback_db fasta file (default: None)  
   - [--pfam_database_dimension PFAM_DATABASE_DIMENSION]  
                         dimension of pfam database (default: 28332677)
   - [--parallel n]       
@@ -57,10 +57,10 @@
                         output more information (default: 1)
 
 - example call for 1 sequence using PSI-BLAST to create a PSSM:       
-`python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
+`python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --fallback-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
 
 - example call for multiple sequences using JACKHMMER to create a pHMM:        
-`python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
+`python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --fallback-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
 
 # PRODRES Docker portable version 
 
@@ -77,9 +77,9 @@ in order to install:
   - `docker run -t -i prodres`
   - then access prodres/ folder and call the pipeline     
   - example call for 1 sequence using PSI-BLAST to create a PSSM:    
-  `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
+  `python PRODRES.py --input test/single_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --fallback-db-fasta uniref90.fasta --second-search psiblast --psiblast_e-val 0.001 --psiblast_iter 3`
   - example call for multiple sequences using JACKHMMER to create a pHMM:    
-  `python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --uniprot-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
+  `python PRODRES.py --input test/multiple_seq.fa --output test/ --pfam-dir pfam --pfamscan-script PfamScan/pfam_scan.pl --pfamscan_bitscore 2 --fallback-db-fasta uniref90.fasta --second-search jackhmmer --jackhmmer-threshold-type e-value --jackhmmer_e-val 0.001`
 
 5. Alternatively, import an input folder from local machine with:     
   `docker run -t -i -v /path/to/import/:/path/in/virtualmachine/ prodres`     
