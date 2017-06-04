@@ -111,10 +111,10 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             outfile = outputdir + "/tableOut.txt"
             dbfile = tempdir + "/QUERY.hits.db"
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
-            if os.path.getsize(dbfile) == 0 and args.paramK:
+            if (os.path.getsize(dbfile) == 0 and args.paramK) or args.force_fallback:
                 vprint("WARNING! CDR database is empty, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
-                dbfile = args.uniprot_db_fasta
+                dbfile = args.fallback_db_fasta
                 db_used = "uniref"
             aligfile = outputdir + "/Alignment.txt"
             fullout = outputdir + "/fullOut.txt"
@@ -148,11 +148,11 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             if os.path.exists(hmmfile + "-{}.hmm".format(args.jackhmmer_max_iter)):
                 os.system("cp " + hmmfile + "-{}.hmm ".format(args.jackhmmer_max_iter) + outputdir+"hmmOut.txt")
             # JACKHMMER SECOND FALLBACK FULL RUN
-            elif args.paramK and jackhmmer_args[-1] != args.uniprot_db_fasta:
+            elif args.paramK and jackhmmer_args[-1] != args.fallback_db_fasta:
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
                 db_used = "uniref"
                 del(jackhmmer_args[-1])
-                jackhmmer_args += [args.uniprot_db_fasta]
+                jackhmmer_args += [args.fallback_db_fasta]
                 jackhmmer_cmd = ["jackhmmer"] + jackhmmer_args
                 call(jackhmmer_cmd)
             vprint("\t\t>end")
@@ -162,8 +162,8 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             # prepare db
             dbfile = tempdir + "/QUERY.hits.db"
             # TEST FOR EXISTANCE OF A DB, IF FALSE, SEARCH ON FULL DB
-            if os.path.getsize(dbfile) == 0 and args.paramK:
-                dbfile = args.uniprot_db_fasta
+            if (os.path.getsize(dbfile) == 0 and args.paramK) or args.force_fallback:
+                dbfile = args.fallback_db_fasta
                 vprint("WARNING! CDR database is empty or Pfamscan is not working, performing search in full DB")
                 logging.warning("\t\t\t>CDR database found empty, searching in full DB")
                 db_used = "uniref"
@@ -200,7 +200,7 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
                 logging.info("\t\t\t> Warning, no output found... proceeding with search on full DB")
                 db_used = "uniref"
                 indb = psiblast_cmd.index("-db")
-                dbfile = args.uniprot_db_fasta
+                dbfile = args.fallback_db_fasta
                 psiblast_cmd[indb+1] = dbfile
                 call(psiblast_cmd)
             vprint("\t\t>end")
