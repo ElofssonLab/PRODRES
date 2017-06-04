@@ -20,7 +20,7 @@ def create_parser(argv):
     parser.add_argument('--paramK', default=True, help='The paramK flag. TODO write more documentation.')
     parser.add_argument('--force-fallback', default=False, help='if True, forces fallback search instead of PRODRES search')
     parser.add_argument('--pfam-dir', required=True, type=str, help='pfam dir path')
-    parser.add_argument('--uniprot-db-fasta', required=True, type=str, help='path to uniprot_db fasta file')
+    parser.add_argument('--fallback-db-fasta', required=True, type=str, help='path to uniprot_db fasta file')
     parser.add_argument('--pfam_database_dimension', type=int, default=56526462, help="dimension of pfam database") #refers to Uniprot 2016_2
     parser.add_argument('--threads', type=str, default=None, help="number of threads (CPUs) to be used in second search")
     parser.add_argument('--parallel', type=int, default=None, help="in case of a multifasta file, enable parallel job submission. int for number of parallel processes ")
