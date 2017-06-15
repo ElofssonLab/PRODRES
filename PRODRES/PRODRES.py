@@ -107,7 +107,7 @@ def main(argv):
         a["pfamscan_e-val"] = None
 
     verify_consistency_of_arguments(args)
-    verify_readable_file_path(args.uniprot_db_fasta)
+    verify_readable_file_path(args.fallback_db_fasta)
     verify_readable_directory_path(args.pfam_dir)
     verify_program_available_in_path_directories("jackhmmer")
     verify_program_available_in_path_directories("psiblast")
