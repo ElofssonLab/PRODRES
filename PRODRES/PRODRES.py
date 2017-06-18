@@ -25,7 +25,7 @@ def create_parser(argv):
     parser.add_argument('--pfam_database_dimension', type=int, default=56526462, help="dimension of pfam database") #refers to Uniprot 2016_2
     parser.add_argument('--threads', type=str, default=None, help="number of threads (CPUs) to be used in second search")
     parser.add_argument('--parallel', type=int, default=None, help="in case of a multifasta file, enable parallel job submission. int for number of parallel processes ")
-
+    parser.add_argument('--force-override', default=False, help="change to anything if you want to force override of output folder")
 
     # Pfamscan parameters
     parser.add_argument('--pfamscan-script', required=True, type=str, help='path to pfam_scan.pl')
