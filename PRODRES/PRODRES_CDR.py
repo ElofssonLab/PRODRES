@@ -55,6 +55,9 @@ def COMMON_DOMAINS_REDUCTION(args, inp):
             os.mkdir(tempdir)
         if not os.path.exists(outputdir):
             os.mkdir(outputdir)
+        elif not args.force_override:
+            logging.warning("found output folder for query {}. skipping job".format(name))
+            return                   
 
         # recursive report
         vprint("\t>Beginning CDR for sequence number "+str(counter)+"/"+str(input_length)+": "+name[:8])
